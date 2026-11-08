@@ -13,6 +13,7 @@
   --yellow:#ffe14d;
   --pink:#ff7ab8;
   --blue:#6ec1ff;
+  --green:#7dff9b;
   --red:#ff4d3d;
   --bd:5px solid var(--ink);
 }
@@ -79,6 +80,7 @@ main{
 .col:nth-child(1){--c:var(--yellow);--i:0}
 .col:nth-child(2){--c:var(--pink);--i:1}
 .col:nth-child(3){--c:var(--blue);--i:2}
+.col:nth-child(4){--c:var(--green);--i:3}
 
 /* hover: kolom melebar, bergeser, bayangan membesar */
 main:hover .col{flex-grow:.7}
@@ -116,7 +118,7 @@ main .col:hover{
 
 .big{
   font-family:'Archivo Black',Impact,sans-serif;
-  font-size:clamp(34px,7.2vw,104px);
+  font-size:clamp(30px,5.2vw,104px);
   line-height:.9;letter-spacing:-2px;
   text-transform:uppercase;
   word-break:break-word;
@@ -219,7 +221,7 @@ footer:hover .track{animation-play-state:paused}
     <span class="sticker">+</span>
     <div>
       <div class="big">Work&shy;space</div>
-      <p class="desc">Ruang kerja dan catatan sehari-hari.</p>
+      <p class="desc">Ruang kerja pribadi canggih.</p>
     </div>
     <span class="go">Buka <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"><path d="M4 12h16M13 5l7 7-7 7"/></svg></span>
   </a>
@@ -229,7 +231,17 @@ footer:hover .track{animation-play-state:paused}
     <span class="sticker">#</span>
     <div>
       <div class="big">Man&shy;ager</div>
-      <p class="desc">Atur dan kelola semuanya dari satu tempat.</p>
+      <p class="desc">Manager pribadi for the best version of yourself.</p>
+    </div>
+    <span class="go">Buka <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"><path d="M4 12h16M13 5l7 7-7 7"/></svg></span>
+  </a>
+
+  <a class="col" href="https://zaim0371.github.io/secretary/">
+    <span class="tag">Secretary</span>
+    <span class="sticker">?</span>
+    <div>
+      <div class="big">Secre&shy;tary</div>
+      <p class="desc">Catatan pribadi dengan pengingat yang siap membantu.</p>
     </div>
     <span class="go">Buka <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"><path d="M4 12h16M13 5l7 7-7 7"/></svg></span>
   </a>
@@ -241,7 +253,7 @@ footer:hover .track{animation-play-state:paused}
 
 <script>
   var t = document.getElementById('track');
-  var s = "UNSENT ✱ WORKSPACE ✱ MANAGER ✱ ZAIM'S OFFICE ✱ ";
+  var s = "UNSENT ✱ WORKSPACE ✱ MANAGER ✱ SECRETARY ✱ ZAIM'S OFFICE ✱ ";
   var html = '';
   for (var i = 0; i < 12; i++) html += '<span>' + s + '</span>';
   t.innerHTML = html;
