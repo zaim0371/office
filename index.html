@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zaim's Office</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#111;
+  --paper:#fff7e0;
+  --yellow:#ffe14d;
+  --pink:#ff7ab8;
+  --blue:#6ec1ff;
+  --red:#ff4d3d;
+  --bd:5px solid var(--ink);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Space Grotesk',system-ui,sans-serif;
+  background:var(--paper);
+  background-image:radial-gradient(var(--ink) 1.4px,transparent 1.6px);
+  background-size:22px 22px;
+  color:var(--ink);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+
+/* ===== HEADER ===== */
+header{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:14px 22px;
+  background:var(--ink);color:var(--paper);
+  border-bottom:var(--bd);
+  animation:drop .6s cubic-bezier(.2,1.4,.4,1) both;
+}
+.logo{
+  font-family:'Archivo Black',Impact,sans-serif;
+  font-size:clamp(22px,3.4vw,40px);letter-spacing:-1px;
+  display:flex;align-items:center;gap:12px;
+}
+.logo i{
+  display:inline-block;width:.8em;height:.8em;background:var(--yellow);
+  border:3px solid var(--paper);
+  animation:spin 6s steps(8) infinite;
+}
+.status{
+  font-weight:700;font-size:14px;
+  background:var(--yellow);color:var(--ink);
+  border:3px solid var(--paper);padding:6px 12px;
+  box-shadow:4px 4px 0 var(--pink);
+  display:flex;align-items:center;gap:8px;
+}
+.status b{width:10px;height:10px;background:var(--red);border-radius:50%;animation:blink 1s steps(2) infinite}
+
+/* ===== COLUMNS ===== */
+main{
+  flex:1;min-height:0;
+  display:flex;gap:22px;
+  padding:26px 22px 94px;
+}
+.col{
+  --c:var(--yellow);
+  flex:1 1 0;min-width:0;
+  position:relative;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:24px 22px;
+  background:var(--c);
+  border:var(--bd);
+  box-shadow:12px 12px 0 var(--ink);
+  color:var(--ink);text-decoration:none;
+  overflow:hidden;
+  transition:flex-grow .55s cubic-bezier(.2,1.2,.3,1),transform .2s,box-shadow .2s,background .2s;
+  animation:rise .8s cubic-bezier(.2,1.3,.4,1) both;
+  animation-delay:calc(var(--i) * 130ms + 250ms);
+}
+.col:nth-child(1){--c:var(--yellow);--i:0}
+.col:nth-child(2){--c:var(--pink);--i:1}
+.col:nth-child(3){--c:var(--blue);--i:2}
+
+/* hover: kolom melebar, bergeser, bayangan membesar */
+main:hover .col{flex-grow:.7}
+main .col:hover{
+  flex-grow:2.2;
+  transform:translate(-6px,-6px) rotate(-.6deg);
+  box-shadow:20px 20px 0 var(--ink);
+  background:var(--c);
+}
+.col:active{
+  transform:translate(8px,8px);
+  box-shadow:0 0 0 var(--ink);
+  transition-duration:.08s;
+}
+.col:focus-visible{outline:6px solid var(--red);outline-offset:4px}
+
+/* garis diagonal yang menyapu saat hover */
+.col::before{
+  content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(-45deg,transparent 0 18px,rgba(0,0,0,.08) 18px 36px);
+  transform:translateX(-101%);transition:transform .5s ease;
+  pointer-events:none;
+}
+.col:hover::before{transform:translateX(0)}
+
+.tag{
+  align-self:flex-start;
+  font-weight:700;font-size:14px;
+  background:var(--ink);color:var(--paper);
+  padding:6px 12px;border:3px solid var(--ink);
+  transform:rotate(-3deg);
+  transition:transform .3s cubic-bezier(.2,1.6,.4,1);
+}
+.col:hover .tag{transform:rotate(3deg) scale(1.12)}
+
+.big{
+  font-family:'Archivo Black',Impact,sans-serif;
+  font-size:clamp(34px,7.2vw,104px);
+  line-height:.9;letter-spacing:-2px;
+  text-transform:uppercase;
+  word-break:break-word;
+  position:relative;
+}
+.col:nth-child(1) .big{-webkit-text-stroke:0}
+.desc{
+  font-weight:700;font-size:clamp(14px,1.4vw,19px);line-height:1.35;
+  max-width:28ch;margin-top:14px;
+  position:relative;
+}
+.go{
+  position:relative;
+  align-self:stretch;
+  display:flex;align-items:center;justify-content:space-between;
+  font-family:'Archivo Black',Impact,sans-serif;
+  font-size:20px;
+  background:var(--paper);
+  border:var(--bd);padding:12px 16px;
+  box-shadow:6px 6px 0 var(--ink);
+  transition:background .2s,color .2s,box-shadow .2s,transform .2s;
+}
+.go svg{width:34px;height:34px;transition:transform .35s cubic-bezier(.2,1.6,.4,1)}
+.col:hover .go{background:var(--ink);color:var(--paper);box-shadow:10px 10px 0 var(--red)}
+.col:hover .go svg{transform:translateX(8px) rotate(-45deg) scale(1.2)}
+
+/* stiker mengambang */
+.sticker{
+  position:absolute;right:-14px;top:70px;
+  width:74px;height:74px;display:grid;place-items:center;
+  background:var(--c);border:var(--bd);
+  font-family:'Archivo Black',Impact,sans-serif;font-size:30px;
+  clip-path:polygon(50% 0,61% 20%,85% 15%,80% 39%,100% 50%,80% 61%,85% 85%,61% 80%,50% 100%,39% 80%,15% 85%,20% 61%,0 50%,20% 39%,15% 15%,39% 20%);
+  background:var(--red);color:var(--ink);
+  animation:spin 8s linear infinite;
+  opacity:0;transform:scale(0);transition:.35s cubic-bezier(.2,1.6,.4,1);
+}
+.col:hover .sticker{opacity:1;transform:scale(1)}
+
+/* ===== MARQUEE ===== */
+footer{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;
+  padding-bottom:env(safe-area-inset-bottom,0);
+  background:var(--yellow);
+  border-top:var(--bd);
+  overflow:hidden;white-space:nowrap;
+  padding:10px 0;
+  animation:rise .6s .9s both;
+}
+.track{display:inline-flex;animation:scroll 18s linear infinite}
+footer:hover .track{animation-play-state:paused}
+.track span{
+  font-family:'Archivo Black',Impact,sans-serif;font-size:20px;
+  padding-right:2.2rem;
+}
+
+/* ===== KEYFRAMES ===== */
+@keyframes rise{from{opacity:0;transform:translateY(90px) rotate(2deg)}to{opacity:1;transform:none}}
+@keyframes drop{from{transform:translateY(-100%)}to{transform:none}}
+@keyframes scroll{to{transform:translateX(-50%)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes blink{50%{opacity:.15}}
+
+/* ===== MOBILE: kolom jadi baris tumpuk, bisa scroll ===== */
+@media (max-width:760px){
+  html,body{height:auto}
+  body{overflow:auto;min-height:100vh}
+  main{flex:none;min-height:auto;flex-direction:column;padding:20px 16px 100px;gap:24px}
+  .col{flex:none;min-height:260px;box-shadow:8px 8px 0 var(--ink)}
+  main:hover .col,main .col:hover{flex-grow:0}
+  .big{font-size:clamp(40px,14vw,72px)}
+  .status{display:none}
+  .sticker{opacity:1;transform:scale(1);width:60px;height:60px;font-size:24px;top:14px;right:10px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><i></i>ZAIM'S OFFICE</div>
+  <div class="status"><b></b>Kantor buka</div>
+</header>
+
+<main>
+  <a class="col" href="https://zaim0371.github.io/unsent/">
+    <span class="tag">Unsent</span>
+    <span class="sticker">!</span>
+    <div>
+      <div class="big">Unsent</div>
+      <p class="desc">Tempat pesan-pesan yang nggak pernah terkirim.</p>
+    </div>
+    <span class="go">Buka <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"><path d="M4 12h16M13 5l7 7-7 7"/></svg></span>
+  </a>
+
+  <a class="col" href="https://zaim0371.github.io/note/">
+    <span class="tag">Workspace</span>
+    <span class="sticker">+</span>
+    <div>
+      <div class="big">Work&shy;space</div>
+      <p class="desc">Ruang kerja dan catatan sehari-hari.</p>
+    </div>
+    <span class="go">Buka <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"><path d="M4 12h16M13 5l7 7-7 7"/></svg></span>
+  </a>
+
+  <a class="col" href="https://zaim0371.github.io/manager/">
+    <span class="tag">Manager</span>
+    <span class="sticker">#</span>
+    <div>
+      <div class="big">Man&shy;ager</div>
+      <p class="desc">Atur dan kelola semuanya dari satu tempat.</p>
+    </div>
+    <span class="go">Buka <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"><path d="M4 12h16M13 5l7 7-7 7"/></svg></span>
+  </a>
+</main>
+
+<footer aria-hidden="true">
+  <div class="track" id="track"></div>
+</footer>
+
+<script>
+  var t = document.getElementById('track');
+  var s = "UNSENT ✱ WORKSPACE ✱ MANAGER ✱ ZAIM'S OFFICE ✱ ";
+  var html = '';
+  for (var i = 0; i < 12; i++) html += '<span>' + s + '</span>';
+  t.innerHTML = html;
+</script>
+</body>
+</html>
