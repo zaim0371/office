@@ -229,10 +229,15 @@ footer:hover .track{animation-play-state:paused}
 .hbtn:active{transform:translate(3px,3px);box-shadow:none}
 .hright{display:flex;align-items:center;gap:10px}
 .dash{
-  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;
-  padding:20px 22px 12px;
+  display:block;padding:12px 22px 4px;overflow:hidden;
   animation:rise .7s .15s cubic-bezier(.2,1.3,.4,1) both;
 }
+.tkv{margin:0 -22px;padding:8px 22px 14px;overflow:hidden}
+.tk{
+  display:flex;gap:16px;width:max-content;will-change:transform;
+  -webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:pan-y;
+}
+.tk .w{flex:0 0 270px;-webkit-user-drag:none}
 .w{
   --c:var(--yellow);
   display:block;min-width:0;color:var(--ink);text-decoration:none;
@@ -267,11 +272,11 @@ a.w:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
 }
 .w-login button:active{transform:translate(3px,3px);box-shadow:none}
 .w-login p{min-height:18px;font-weight:700;font-size:12px;color:var(--red)}
-@media (max-width:1000px){.dash{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:760px){
-  .dash{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;padding:16px 16px 14px;-webkit-overflow-scrolling:touch}
-  .dash .w{flex:0 0 78%;scroll-snap-align:start}
-  .dash .w-login{flex:0 0 100%;max-width:none}
+  .dash{padding:12px 16px 4px}
+  .tkv{margin:0 -16px;padding:8px 16px 14px}
+  .tk{gap:14px}
+  .tk .w{flex:0 0 232px}
   .hbtn{padding:5px 10px}
 }
 
@@ -444,8 +449,37 @@ a.w:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
   var URL_MG = 'https://zaim0371.github.io/manager/', URL_SEC = 'https://zaim0371.github.io/secretary/';
   var dash = document.getElementById('dash'), outBtn = document.getElementById('outBtn');
   var sb = window.supabase ? window.supabase.createClient(SB_URL, SB_KEY) : null;
-  var uid = null, mg = null, todos = [], todoN = 0, loaded = false, failed = false;
+  var uid = null, mg = null, todos = [], todoN = 0, loaded = false, failed = false, errMg = '', errTd = '';
   var busy = false, again = false, tmr = 0, chan = null;
+  var tk = null, tx = 0, loopW = 0, held = false, resumeAt = 0, lastT = 0, SPEED = 22;
+  var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function measure(){
+    if (!tk) { loopW = 0; return; }
+    var n = tk.children.length / 3;
+    loopW = n ? tk.children[n].offsetLeft - tk.children[0].offsetLeft : 0;
+  }
+  function place(){ if (tk) tk.style.transform = 'translate3d(' + tx + 'px,0,0)'; }
+  function frame(t){
+    requestAnimationFrame(frame);
+    var dt = Math.min(0.05, (t - lastT) / 1000); lastT = t;
+    if (!tk || still || held || Date.now() < resumeAt) return;
+    if (!loopW) measure();
+    if (!loopW) return;
+    tx -= SPEED * dt;
+    if (tx <= -loopW) tx += loopW;
+    place();
+  }
+  var downT = 0;
+  function hold(){ held = true; downT = Date.now(); }
+  function release(){ if (held){ held = false; resumeAt = Date.now() + 3000; } }
+  dash.addEventListener('pointerdown', hold);
+  dash.addEventListener('pointerup', release);
+  dash.addEventListener('pointercancel', release);
+  dash.addEventListener('pointerleave', release);
+  dash.addEventListener('click', function(e){ if (Date.now() - downT > 350 && e.target.closest && e.target.closest('a.w')) e.preventDefault(); }, true);
+  dash.addEventListener('contextmenu', function(e){ if (tk) e.preventDefault(); });
+  window.addEventListener('resize', function(){ measure(); });
+  requestAnimationFrame(frame);
   var HARI = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'];
 
   function esc(t){ var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; }
@@ -498,10 +532,10 @@ a.w:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
     var f = money();
     dash_ += card('w-money', URL_MG, 'Uang', 'Saldo',
       '<div class="w-big">' + (mg ? rp(f.bal) : '—') + '</div>' +
-      (mg ? '<div class="w-sub"><i>↓ ' + rp(f.inc) + '</i><i class="o">↑ ' + rp(f.out) + '</i></div>' : '<div class="w-sub">' + (failed ? 'Gagal memuat' : 'Memuat…') + '</div>'));
+      (mg ? '<div class="w-sub"><i>↓ ' + rp(f.inc) + '</i><i class="o">↑ ' + rp(f.out) + '</i></div>' : '<div class="w-sub">' + (errMg ? 'Gagal: ' + esc(errMg) : 'Memuat…') + '</div>'));
 
     dash_ += card('w-todo', URL_SEC, 'To Do', todoN ? todoN + ' aktif' : '',
-      list(todos.map(function(t){ return li('', t.text); }), 3, loaded ? 'Kosong' : 'Memuat…'));
+      list(todos.map(function(t){ return li('', t.text); }), 3, errTd ? 'Gagal: ' + errTd : (loaded ? 'Kosong' : 'Memuat…')));
 
     var today = agenda(0), shown = today, label = 'Hari ini';
     if (!today.length){ shown = agenda(1); label = shown.length ? 'Besok' : 'Hari ini'; }
@@ -512,11 +546,15 @@ a.w:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
     dash_ += card('w-tugas', URL_MG, 'Tugas', act.length ? act.length + ' aktif' : '',
       list(act.map(function(t){ var d = due(t); return li(d, t.title); }), 3, mg ? 'Kosong' : 'Memuat…'));
 
-    dash.innerHTML = dash_;
+    var set = dash_;
+    dash.innerHTML = '<div class="tkv"><div class="tk" id="tk">' + set + set + set + '</div></div>';
+    var cl = dash.querySelectorAll('.tk .w');
+    for (var i = cl.length / 3; i < cl.length; i++){ cl[i].setAttribute('aria-hidden', 'true'); cl[i].tabIndex = -1; cl[i].draggable = false; }
+    tk = document.getElementById('tk'); measure(); place();
   }
 
   function showLogin(msg){
-    outBtn.hidden = true;
+    outBtn.hidden = true; tk = null;
     dash.innerHTML = '<form class="w w-login" id="loginF"><div class="w-h"><h3>Masuk</h3></div>' +
       '<input id="le" type="email" placeholder="Email" autocomplete="email" required>' +
       '<input id="lp" type="password" placeholder="Sandi" autocomplete="current-password" required>' +
@@ -539,11 +577,17 @@ a.w:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
         again = false;
         var r = await Promise.all([
           sb.from('manager_state').select('data').eq('user_id', uid).maybeSingle(),
-          sb.from('secretary_todos').select('text', { count: 'exact' }).eq('done', false).order('ts', { ascending: true }).limit(3)
+          sb.from('secretary_todos').select('*').order('id').limit(1000)
         ]);
-        failed = !!(r[0].error && r[1].error);
+        errMg = r[0].error ? String(r[0].error.message || 'error').slice(0, 40) : '';
+        errTd = r[1].error ? String(r[1].error.message || 'error').slice(0, 40) : '';
+        failed = !!errMg;
         if (!r[0].error) mg = r[0].data && r[0].data.data && typeof r[0].data.data === 'object' ? r[0].data.data : null;
-        if (!r[1].error){ todos = r[1].data || []; todoN = r[1].count == null ? todos.length : r[1].count; }
+        if (!r[1].error){
+          var open = (r[1].data || []).filter(function(t){ return !(t.done === true || t.done === 'true' || t.done === 1); })
+            .sort(function(a, b){ return (Number(a.ts) || 0) - (Number(b.ts) || 0); });
+          todoN = open.length; todos = open.slice(0, 3);
+        }
         loaded = true;
         draw();
       } while (again);
@@ -564,7 +608,7 @@ a.w:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
   function start(session){
     var id = session.user.id;
     if (uid === id) return;
-    uid = id; mg = null; todos = []; todoN = 0; loaded = false; failed = false;
+    uid = id; mg = null; todos = []; todoN = 0; loaded = false; failed = false; errMg = ''; errTd = '';
     outBtn.hidden = false; draw(); load(); subscribe();
   }
   function stop(){
