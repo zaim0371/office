@@ -18,7 +18,7 @@
   --bd:5px solid var(--ink);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
+html,body{min-height:100%}
 body{
   font-family:'Space Grotesk',system-ui,sans-serif;
   background:var(--paper);
@@ -26,7 +26,7 @@ body{
   background-size:22px 22px;
   color:var(--ink);
   display:flex;flex-direction:column;
-  overflow:hidden;
+  min-height:100vh;overflow-x:hidden;
 }
 
 /* ===== HEADER ===== */
@@ -58,9 +58,9 @@ header{
 
 /* ===== COLUMNS ===== */
 main{
-  flex:1;min-height:0;
+  flex:1;min-height:380px;
   display:flex;gap:22px;
-  padding:26px 22px 94px;
+  padding:6px 22px 94px;
 }
 .col{
   --c:var(--yellow);
@@ -219,6 +219,62 @@ footer:hover .track{animation-play-state:paused}
 .pin-pad button.ok{background:var(--green)}
 @keyframes shake{20%{transform:translateX(-12px)}40%{transform:translateX(12px)}60%{transform:translateX(-8px)}80%{transform:translateX(8px)}}
 
+
+/* ===== WIDGET RINGKASAN ===== */
+.hbtn{
+  font:700 13px 'Space Grotesk',system-ui,sans-serif;cursor:pointer;
+  background:var(--paper);color:var(--ink);border:3px solid var(--paper);padding:6px 12px;
+  box-shadow:3px 3px 0 var(--pink);
+}
+.hbtn:active{transform:translate(3px,3px);box-shadow:none}
+.hright{display:flex;align-items:center;gap:10px}
+.dash{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;
+  padding:20px 22px 12px;
+  animation:rise .7s .15s cubic-bezier(.2,1.3,.4,1) both;
+}
+.w{
+  --c:var(--yellow);
+  display:block;min-width:0;color:var(--ink);text-decoration:none;
+  background:#fff;border:4px solid var(--ink);box-shadow:6px 6px 0 var(--ink);
+  padding:10px 12px 12px;
+  transition:transform .15s,box-shadow .15s;
+}
+a.w:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 var(--ink)}
+a.w:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
+.w-money{--c:var(--green)}.w-todo{--c:var(--pink)}.w-jadwal{--c:var(--blue)}.w-tugas{--c:var(--yellow)}
+.w-h{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.w-h h3{
+  font-family:'Archivo Black',Impact,sans-serif;font-size:12px;letter-spacing:.5px;text-transform:uppercase;
+  background:var(--c);border:3px solid var(--ink);padding:2px 8px;
+}
+.w-h small{font-weight:700;font-size:11px;opacity:.7;white-space:nowrap}
+.w-big{font-family:'Archivo Black',Impact,sans-serif;font-size:clamp(18px,2vw,26px);letter-spacing:-.5px;line-height:1.1;overflow-wrap:anywhere}
+.w-sub{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;font-weight:700;font-size:12px}
+.w-sub i{font-style:normal;color:#0a7a2f}.w-sub i.o{color:var(--red)}
+.w ul{list-style:none;display:grid;gap:5px}
+.w li{display:flex;gap:6px;align-items:baseline;font-weight:500;font-size:13px;line-height:1.25;min-width:0}
+.w li b{font-weight:700;font-size:11px;flex:none;background:var(--paper);border:2px solid var(--ink);padding:0 4px}
+.w li span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.w li.more,.w li.none{font-weight:700;font-size:12px;opacity:.6}
+.w-login{grid-column:1/-1;max-width:420px;display:grid;gap:8px}
+.w-login input{
+  font:inherit;font-size:14px;padding:8px 10px;border:3px solid var(--ink);background:var(--paper);color:var(--ink);min-width:0;
+}
+.w-login button{
+  font-family:'Archivo Black',Impact,sans-serif;font-size:14px;padding:9px;cursor:pointer;
+  background:var(--yellow);border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);color:var(--ink);
+}
+.w-login button:active{transform:translate(3px,3px);box-shadow:none}
+.w-login p{min-height:18px;font-weight:700;font-size:12px;color:var(--red)}
+@media (max-width:1000px){.dash{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:760px){
+  .dash{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;padding:16px 16px 14px;-webkit-overflow-scrolling:touch}
+  .dash .w{flex:0 0 78%;scroll-snap-align:start}
+  .dash .w-login{flex:0 0 100%;max-width:none}
+  .hbtn{padding:5px 10px}
+}
+
 /* ===== KEYFRAMES ===== */
 @keyframes rise{from{opacity:0;transform:translateY(90px) rotate(2deg)}to{opacity:1;transform:none}}
 @keyframes drop{from{transform:translateY(-100%)}to{transform:none}}
@@ -246,8 +302,13 @@ footer:hover .track{animation-play-state:paused}
 
 <header>
   <div class="logo"><i></i>ZAIM'S OFFICE</div>
-  <div class="status"><b></b>Kantor buka</div>
+  <div class="hright">
+    <button class="hbtn" id="outBtn" type="button" hidden>Keluar</button>
+    <div class="status"><b></b>Kantor buka</div>
+  </div>
 </header>
+
+<section class="dash" id="dash" aria-label="Ringkasan"></section>
 
 <main>
   <a class="col locked" href="#unsent" id="unsentCard" role="button" aria-haspopup="dialog">
@@ -314,6 +375,7 @@ footer:hover .track{animation-play-state:paused}
   <div class="track" id="track"></div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
 <script>
   var t = document.getElementById('track');
   var s = "UNSENT ✱ WORKSPACE ✱ MANAGER ✱ SECRETARY ✱ ZAIM'S OFFICE ✱ ";
@@ -372,6 +434,159 @@ footer:hover .track{animation-play-state:paused}
       else if (e.key === 'Escape') closePin();
     });
   })();
+</script>
+
+<script>
+/* Ringkasan: uang, jadwal, tugas (dari Manager) + to do (dari Secretary). Hanya baca. */
+(function(){
+  var SB_URL = 'https://ypdtaoccfxzquyfsiloy.supabase.co';
+  var SB_KEY = 'sb_publishable_2crOjnp8Rf4zhCt2bdO_Ug_rH4enKGH';
+  var URL_MG = 'https://zaim0371.github.io/manager/', URL_SEC = 'https://zaim0371.github.io/secretary/';
+  var dash = document.getElementById('dash'), outBtn = document.getElementById('outBtn');
+  var sb = window.supabase ? window.supabase.createClient(SB_URL, SB_KEY) : null;
+  var uid = null, mg = null, todos = [], todoN = 0, loaded = false, failed = false;
+  var busy = false, again = false, tmr = 0, chan = null;
+  var HARI = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'];
+
+  function esc(t){ var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; }
+  function rp(n){ n = Math.round(Number(n) || 0); return (n < 0 ? '-' : '') + 'Rp' + Math.abs(n).toLocaleString('id-ID'); }
+  function pad(n){ return String(n).padStart(2, '0'); }
+  function iso(d){ return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function dayDiff(s){ return Math.round((new Date(s + 'T00:00') - new Date(iso(new Date()) + 'T00:00')) / 864e5); }
+  function hhmm(s){ return String(s || '').replace(':', '.'); }
+  function sum(a, t){ return a.filter(function(x){ return x.type === t; }).reduce(function(s, x){ return s + (Number(x.amt) || 0); }, 0); }
+
+  function money(){
+    var tx = mg && Array.isArray(mg.tx) ? mg.tx : [], ym = iso(new Date()).slice(0, 7);
+    var m = tx.filter(function(x){ return String(x.date).slice(0, 7) === ym; });
+    return { bal: sum(tx, 'in') - sum(tx, 'out'), inc: sum(m, 'in'), out: sum(m, 'out') };
+  }
+  function agenda(off){
+    var d = new Date(); d.setDate(d.getDate() + off);
+    var key = iso(d), sc = (mg && Array.isArray(mg.sched) && mg.sched[(d.getDay() + 6) % 7]) || [];
+    return sc.filter(function(it){ return it.date ? it.date === key : (!it.until || it.until >= key); })
+             .sort(function(a, b){ return (a.time || '99').localeCompare(b.time || '99'); });
+  }
+  function tasks(){
+    var k = function(t){ return (t.deadline || '9999-12-31') + ' ' + (t.time || '99:99'); };
+    return (mg && Array.isArray(mg.tasks) ? mg.tasks : []).filter(function(t){ return !t.done; })
+      .sort(function(a, b){ return k(a).localeCompare(k(b)) || (b.prio || 0) - (a.prio || 0); });
+  }
+  function due(t){
+    if (!t.deadline) return '';
+    var n = dayDiff(t.deadline);
+    if (n < 0) return 'Telat ' + (-n) + ' hr';
+    if (n === 0) return 'Hari ini';
+    if (n === 1) return 'Besok';
+    return n + ' hr';
+  }
+
+  function card(cls, href, title, badge, body){
+    return '<a class="w ' + cls + '" href="' + href + '"><div class="w-h"><h3>' + title + '</h3><small>' + esc(badge) + '</small></div>' + body + '</a>';
+  }
+  function li(tag, text){ return '<li>' + (tag ? '<b>' + esc(tag) + '</b>' : '') + '<span>' + esc(text) + '</span></li>'; }
+  function list(items, max, empty){
+    if (!items.length) return '<ul>' + '<li class="none"><span>' + empty + '</span></li></ul>';
+    var h = items.slice(0, max).join('');
+    if (items.length > max) h += '<li class="more"><span>+' + (items.length - max) + ' lagi</span></li>';
+    return '<ul>' + h + '</ul>';
+  }
+
+  function draw(){
+    if (!uid) return;
+    var dash_ = '';
+    var f = money();
+    dash_ += card('w-money', URL_MG, 'Uang', 'Saldo',
+      '<div class="w-big">' + (mg ? rp(f.bal) : '—') + '</div>' +
+      (mg ? '<div class="w-sub"><i>↓ ' + rp(f.inc) + '</i><i class="o">↑ ' + rp(f.out) + '</i></div>' : '<div class="w-sub">' + (failed ? 'Gagal memuat' : 'Memuat…') + '</div>'));
+
+    dash_ += card('w-todo', URL_SEC, 'To Do', todoN ? todoN + ' aktif' : '',
+      list(todos.map(function(t){ return li('', t.text); }), 3, loaded ? 'Kosong' : 'Memuat…'));
+
+    var today = agenda(0), shown = today, label = 'Hari ini';
+    if (!today.length){ shown = agenda(1); label = shown.length ? 'Besok' : 'Hari ini'; }
+    dash_ += card('w-jadwal', URL_MG, 'Jadwal', label + ' · ' + HARI[(new Date().getDay() + 6 + (label === 'Besok' ? 1 : 0)) % 7],
+      list(shown.map(function(i){ return li(i.time ? hhmm(i.time) : '', i.text); }), 3, mg ? 'Kosong' : 'Memuat…'));
+
+    var act = tasks();
+    dash_ += card('w-tugas', URL_MG, 'Tugas', act.length ? act.length + ' aktif' : '',
+      list(act.map(function(t){ var d = due(t); return li(d, t.title); }), 3, mg ? 'Kosong' : 'Memuat…'));
+
+    dash.innerHTML = dash_;
+  }
+
+  function showLogin(msg){
+    outBtn.hidden = true;
+    dash.innerHTML = '<form class="w w-login" id="loginF"><div class="w-h"><h3>Masuk</h3></div>' +
+      '<input id="le" type="email" placeholder="Email" autocomplete="email" required>' +
+      '<input id="lp" type="password" placeholder="Sandi" autocomplete="current-password" required>' +
+      '<button type="submit">Masuk</button><p id="lm" aria-live="polite">' + esc(msg || '') + '</p></form>';
+    document.getElementById('loginF').addEventListener('submit', function(e){
+      e.preventDefault();
+      var m = document.getElementById('lm'); m.textContent = '…';
+      sb.auth.signInWithPassword({ email: document.getElementById('le').value.trim(), password: document.getElementById('lp').value })
+        .then(function(r){ if (r.error) m.textContent = 'Email atau sandi salah'; })
+        .catch(function(){ m.textContent = 'Jaringan gagal'; });
+    });
+  }
+
+  async function load(){
+    if (!sb || !uid) return;
+    if (busy){ again = true; return; }
+    busy = true;
+    try{
+      do{
+        again = false;
+        var r = await Promise.all([
+          sb.from('manager_state').select('data').eq('user_id', uid).maybeSingle(),
+          sb.from('secretary_todos').select('text', { count: 'exact' }).eq('done', false).order('ts', { ascending: true }).limit(3)
+        ]);
+        failed = !!(r[0].error && r[1].error);
+        if (!r[0].error) mg = r[0].data && r[0].data.data && typeof r[0].data.data === 'object' ? r[0].data.data : null;
+        if (!r[1].error){ todos = r[1].data || []; todoN = r[1].count == null ? todos.length : r[1].count; }
+        loaded = true;
+        draw();
+      } while (again);
+    }catch(e){ failed = true; loaded = true; draw(); }
+    busy = false;
+  }
+  function soon(){ clearTimeout(tmr); tmr = setTimeout(load, 600); }
+
+  function subscribe(){
+    try{
+      if (chan) sb.removeChannel(chan);
+      chan = sb.channel('office-' + uid)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'manager_state', filter: 'user_id=eq.' + uid }, soon)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'secretary_todos' }, soon)
+        .subscribe();
+    }catch(e){}
+  }
+  function start(session){
+    var id = session.user.id;
+    if (uid === id) return;
+    uid = id; mg = null; todos = []; todoN = 0; loaded = false; failed = false;
+    outBtn.hidden = false; draw(); load(); subscribe();
+  }
+  function stop(){
+    uid = null; mg = null; todos = []; todoN = 0; loaded = false;
+    try{ if (chan) sb.removeChannel(chan); }catch(e){} chan = null;
+    showLogin();
+  }
+
+  if (!sb){ dash.innerHTML = '<div class="w w-login"><p>Pustaka Supabase gagal dimuat.</p></div>'; return; }
+
+  outBtn.addEventListener('click', function(){ sb.auth.signOut(); });
+  sb.auth.onAuthStateChange(function(ev, session){
+    if (ev === 'SIGNED_OUT') stop();
+    else if (session && (ev === 'SIGNED_IN' || ev === 'INITIAL_SESSION')) setTimeout(function(){ start(session); }, 0);
+  });
+  sb.auth.getSession().then(function(r){ if (r.data && r.data.session) start(r.data.session); else if (!uid) showLogin(); })
+    .catch(function(){ showLogin('Jaringan gagal'); });
+
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden && uid) load(); });
+  window.addEventListener('online', function(){ if (uid) load(); });
+  setInterval(function(){ if (uid && !document.hidden){ draw(); load(); } }, 60000);
+})();
 </script>
 </body>
 </html>
