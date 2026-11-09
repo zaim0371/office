@@ -274,119 +274,101 @@ a.c:active{transform:translate(4px,4px) rotate(var(--r));box-shadow:0 0 0 var(--
 
 /* ===== KARTU: semua kotak persegi bersudut tajam. Tata letak, ukuran dan sisi berbeda tiap halaman ===== */
 .pg{perspective:1100px}
-.pg{container-type:inline-size}
 .wrap{max-width:520px}
-.gl{--g:clamp(8px,2.4vw,12px);--u:calc((min(100cqw,440px) - 5*var(--g))/6);display:grid;grid-template-columns:repeat(6,var(--u));grid-auto-rows:var(--u);grid-auto-flow:dense;gap:var(--g);justify-content:center}
-.sz2{grid-column:span 2;grid-row:span 2}.sz3{grid-column:span 3;grid-row:span 3}.sz4{grid-column:span 4;grid-row:span 4}
-.gl>.c{min-width:0;min-height:0}
-.gl>.c:nth-child(1){--k:0}.gl>.c:nth-child(2){--k:1}.gl>.c:nth-child(3){--k:2}.gl>.c:nth-child(4){--k:3}
-/* dasar: kotak tajam, ketebalan sisi dan arah bayangan diatur per kartu lewat variabel */
+.pgs{align-items:flex-start}
+.vp{transition:height .35s ease}
+.pgs .pg{padding:18px clamp(12px,3vw,22px) 16px}
+
+/* kartu = kotak persegi bersudut tajam; sisi kotak mengikuti banyaknya data (S/M/L/X), tinggi halaman mengikuti isi */
+.gl{--S:clamp(84px,25vw,106px);--M:clamp(120px,36vw,146px);--L:clamp(160px,47vw,190px);--X:clamp(196px,58vw,236px);
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:18px}
+.gl>.c{flex:none;width:var(--w);aspect-ratio:1/1;min-width:0;min-height:0;overflow:hidden}
+.sS{--w:var(--S)}.sM{--w:var(--M)}.sL{--w:var(--L)}.sX{--w:var(--X)}
+.gl>.c:nth-child(1){--k:0}.gl>.c:nth-child(2){--k:1;margin-top:12px}.gl>.c:nth-child(3){--k:2}.gl>.c:nth-child(4){--k:3;margin-top:6px}
 .gl .c,.gl .c *,.gl .c::before,.gl .c::after{border-radius:0!important}
-.c{--sh:6px 6px 0 var(--ink);--shh:10px 10px 0 var(--ink);box-shadow:var(--sh);overflow:hidden;background:#fff;--r:0deg}
+.c{--sh:6px 6px 0 var(--ink);--shh:9px 9px 0 var(--ink);box-shadow:var(--sh);background:#fff;--r:0deg}
 a.c:hover{box-shadow:var(--shh)}
 a.c:active{box-shadow:0 0 0 transparent}
 .c .perf::before,.c .perf::after{content:none}
 .c .ring{background:linear-gradient(to top,var(--ink) calc(var(--p)*1%),#fff 0)}
 .c .now::before{border-radius:0}
 .tab{position:relative}
-.tab.on::after{content:"";position:absolute;left:0;bottom:0;height:5px;background:var(--ink);animation:tabfill 3s linear both}
+.tab.on::after{content:"";position:absolute;left:0;bottom:0;height:5px;background:var(--ink);animation:tabfill 6s linear both}
 #dash.hold .tab.on::after{display:none}
 
-/* ukuran ringkas, sesuai fungsi */
-.pgs .pg{padding:20px clamp(14px,3vw,26px) 18px}
-.gl .c{--pd:clamp(8px,2vw,13px)}
-.gl .n{font-size:clamp(16px,4.2vw,24px);margin-top:6px}
-.gl .n.t{font-size:clamp(12px,3vw,16px)}
-.gl .sp{height:clamp(38px,9vw,54px)}
-.gl .c ul{gap:5px;margin-top:8px}
-.gl .c li{font-size:clamp(11px,2.5vw,13px)}
-.gl .ring{width:clamp(40px,9vw,52px)}
-.gl .badge{width:clamp(36px,8vw,46px);font-size:clamp(16px,4vw,22px)}
-.gl .s-cal .n{font-size:clamp(22px,5vw,32px)}
-.gl .s-coin .n,.gl .s-price .n{font-size:clamp(14px,3.4vw,22px)}
+/* isi ringkas supaya tidak terpotong */
+.gl .c{--pd:8px;border-width:4px}
+.gl .c-h{margin-bottom:0}
+.gl .c-h span{font-size:10px;padding:2px 6px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gl .c-h small{font-size:10px}
+.gl .c.sS .c-h span{font-size:9px;padding:1px 4px}
+.gl .c.sS .c-h small{display:none}
+.gl .c .n{font-size:16px;margin-top:4px}
+.gl .c.sS .n{font-size:15px}
+.gl .c.sM .n{font-size:19px}
+.gl .c.sL .n,.gl .c.sX .n{font-size:21px}
+.gl .c .n.t{font-size:12px}
+.gl .c .sub{font-size:10px;margin-top:2px}
+.gl .c ul{gap:4px;margin-top:6px}
+.gl .c li{font-size:11px}
+.gl .c li.ck span{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.gl .sp{height:40px;margin-top:4px}
+.gl .perf{margin-top:6px}
+.gl .ring{width:38px}
+.gl .ring b{font-size:9px}
+.gl .badge{width:34px;font-size:17px;box-shadow:2px 2px 0 var(--ink)}
+.gl .hbs{gap:6px;margin-top:6px}
+.gl .hl{font-size:11px;margin-bottom:2px}
+.gl .hb s,.gl .mt{height:9px;border-width:2px}
+.gl .tr{font-size:11px}
 
-/* 1. STRUK: sisi kiri tebal, bawah putus-putus, barcode */
-.s-receipt{--sh:8px 8px 0 var(--ink);--shh:12px 12px 0 var(--ink);background:#fffdf4;border-left-width:12px;border-bottom:6px dashed var(--ink);padding-bottom:calc(var(--pd) + 4px)}
+/* 1. STRUK */
+.s-receipt{--sh:6px 6px 0 var(--ink);--shh:9px 9px 0 var(--ink);background:#fffdf4;border-left-width:8px;border-bottom:4px dashed var(--ink)}
 .s-receipt .perf{border-top-style:dashed}
 .s-receipt .c-h span{background:var(--ink);color:var(--paper)}
-.bc{flex:none;height:20px;margin-top:8px;background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 4px,var(--ink) 4px 5px,transparent 5px 9px,var(--ink) 9px 12px,transparent 12px 14px)}
-
-/* 2. MAP: sisi bawah sangat tebal, bayangan ke kiri-bawah */
-.s-tab{--sh:-8px 8px 0 var(--ink);--shh:-12px 12px 0 var(--ink);background:var(--c);--chip:#fff;border-bottom-width:16px}
-
-/* 3. PEMASUKAN: bingkai ganda di dalam, bayangan lurus ke bawah */
-.s-coin{--sh:inset 0 0 0 4px var(--c),inset 0 0 0 7px var(--ink),0 10px 0 var(--ink);--shh:inset 0 0 0 4px var(--c),inset 0 0 0 7px var(--ink),0 15px 0 var(--ink);background:var(--c);border-width:6px;align-items:center;justify-content:center;text-align:center;padding:clamp(14px,3vw,24px)}
+/* 2. MAP */
+.s-tab{--sh:-6px 6px 0 var(--ink);--shh:-9px 9px 0 var(--ink);background:var(--c);--chip:#fff;border-bottom-width:10px}
+/* 3. MASUK */
+.s-coin{--sh:inset 0 0 0 3px var(--c),inset 0 0 0 5px var(--ink),0 7px 0 var(--ink);--shh:inset 0 0 0 3px var(--c),inset 0 0 0 5px var(--ink),0 10px 0 var(--ink);background:var(--c);border-width:5px!important;align-items:center;justify-content:center;text-align:center;padding:12px}
 .s-coin .c-h{justify-content:center}
-.s-coin .n,.s-price .n{font-size:clamp(14px,3.8vw,28px)}
-
-/* 4. PENGELUARAN: sisi kanan merah tebal, bayangan ke kanan-atas */
-.s-price{--sh:8px -8px 0 var(--ink);--shh:12px -12px 0 var(--ink);border-right:18px solid var(--red)}
-.s-price .n{margin-top:auto}
-
-/* 5. BUKU: garis kertas, deretan kotak pengikat di kiri */
-.s-nb{padding-left:calc(var(--pd) + 24px);background:#fff repeating-linear-gradient(transparent 0 22px,rgba(60,120,255,.2) 22px 23px)}
-.s-nb::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:9px;background:repeating-linear-gradient(var(--ink) 0 9px,transparent 9px 24px)}
-.s-nb::after{content:"";position:absolute;left:34px;top:0;bottom:0;width:2px;background:var(--red);opacity:.55}
-
-/* 6. NOTE: sisi atas tebal, bayangan hanya ke kanan */
-.s-note{--sh:12px 0 0 var(--ink);--shh:18px 0 0 var(--ink);background:var(--c);--chip:#fff;border-top-width:16px}
-
-/* 7. PROGRES: bingkai putus-putus */
-.s-arch{--sh:5px 5px 0 var(--ink);--shh:8px 8px 0 var(--ink);background:var(--c);--chip:#fff;border-style:dashed;border-width:5px;align-items:center;text-align:center}
+.s-coin .mt{width:70%}
+/* 4. KELUAR */
+.s-price{--sh:6px -6px 0 var(--ink);--shh:9px -9px 0 var(--ink);border-right:8px solid var(--red)}
+/* 5. BUKU */
+.s-nb{padding-left:calc(var(--pd) + 18px);background:#fff repeating-linear-gradient(transparent 0 22px,rgba(60,120,255,.2) 22px 23px)}
+.s-nb::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:7px;background:repeating-linear-gradient(var(--ink) 0 7px,transparent 7px 20px)}
+.s-nb::after{content:"";position:absolute;left:24px;top:0;bottom:0;width:2px;background:var(--red);opacity:.55}
+/* 6. NOTE */
+.s-note{--sh:8px 0 0 var(--ink);--shh:12px 0 0 var(--ink);background:var(--c);--chip:#fff;border-top-width:10px!important}
+/* 7. PROGRES */
+.s-arch{--sh:5px 5px 0 var(--ink);--shh:8px 8px 0 var(--ink);background:var(--c);--chip:#fff;border-style:dashed;align-items:center;text-align:center}
 .s-arch .row{margin-top:auto;justify-content:center}
-
-/* 8. AKTIF: garis tepi ganda */
-.s-stamp{border:9px double var(--ink);background:var(--c);--sh:6px 6px 0 var(--ink);align-items:center;justify-content:center;text-align:center}
-.s-stamp .n{margin-top:2px}
-
-/* 9. HARI INI: papan jepit dengan penjepit kotak di atas */
-.s-clip{--sh:8px 8px 0 var(--ink);--shh:12px 12px 0 var(--ink);overflow:visible;padding-top:calc(var(--pd) + 12px);background:#fff repeating-linear-gradient(transparent 0 26px,rgba(0,0,0,.07) 26px 27px)}
-.s-clip::before{content:"";position:absolute;top:-22px;left:50%;width:44%;height:26px;margin-left:-22%;background:var(--ink)}
-.s-clip::after{content:"";position:absolute;top:-12px;left:50%;width:14px;height:8px;margin-left:-7px;background:#fff}
-
-/* 10. BESOK: sisi kanan dan bawah tebal, tanpa bayangan (tebal sendiri) */
-.s-tag{--sh:0 0 0 transparent;--shh:6px 6px 0 var(--ink);background:var(--c);--chip:#fff;border-right-width:12px;border-bottom-width:12px}
-
-/* 11. BERIKUTNYA: satu lembar di belakang, bergeser ke kiri-bawah */
-.s-bub{--sh:-7px 7px 0 #fff,-7px 7px 0 4px var(--ink);--shh:-11px 11px 0 #fff,-11px 11px 0 4px var(--ink);background:var(--c);--chip:#fff;overflow:visible}
-
-/* 12. KALENDER: header merah, lembar bertumpuk ke bawah */
-.s-cal{--sh:0 7px 0 -2px #fff,0 7px 0 2px var(--ink),0 14px 0 -4px #fff,0 14px 0 0 var(--ink);--shh:0 10px 0 -2px #fff,0 10px 0 2px var(--ink),0 19px 0 -4px #fff,0 19px 0 0 var(--ink);text-align:center;overflow:visible}
-.s-cal::before{content:"";position:absolute;top:-14px;left:22%;width:10px;height:24px;background:var(--ink);box-shadow:clamp(34px,10vw,56px) 0 0 var(--ink);z-index:2}
-.cal-h{margin:calc(-1*var(--pd)) calc(-1*var(--pd)) 0;padding:3px 0;background:var(--red);color:#fff;border-bottom:4px solid var(--ink);font:800 clamp(10px,2.4vw,13px) 'Archivo Black',Impact,sans-serif;text-transform:uppercase;letter-spacing:1px}
-.s-cal .n{margin-top:6px;font-size:clamp(26px,7vw,44px)}
-
-/* 13. TUGAS AKTIF: tumpukan tiga lembar + klip kotak */
-.s-stack{--sh:6px 6px 0 -1px #fff,6px 6px 0 3px var(--ink),12px 12px 0 -1px #fff,12px 12px 0 3px var(--ink);--shh:9px 9px 0 -1px #fff,9px 9px 0 3px var(--ink),17px 17px 0 -1px #fff,17px 17px 0 3px var(--ink);overflow:visible;padding-left:calc(var(--pd) + 4px)}
-.s-stack::before{content:"";position:absolute;top:-18px;left:20px;width:14px;height:46px;border:4px solid var(--ink);z-index:2}
-
-/* 14. PRIORITAS: pita hazard atas dan bawah, sisi kiri tebal */
-.s-haz{--sh:8px 8px 0 var(--ink);--shh:12px 12px 0 var(--ink);border-left-width:12px;padding-top:calc(var(--pd) + 18px);padding-bottom:calc(var(--pd) + 12px)}
-.s-haz::before,.s-haz::after{content:"";position:absolute;left:0;right:0;height:12px;background:repeating-linear-gradient(-45deg,var(--ink) 0 8px,var(--yellow) 8px 16px);background-size:200% 100%;animation:hazmove 3s linear infinite}
-.s-haz::before{top:0;border-bottom:3px solid var(--ink)}
-.s-haz::after{bottom:0;border-top:3px solid var(--ink)}
-
-/* 15. AKTIF: bingkai garis di dalam kotak */
-.s-hex{--sh:6px 6px 0 var(--ink);background:var(--c);--chip:#fff;border-width:6px;outline:3px solid var(--ink);outline-offset:-16px;align-items:center;justify-content:center;text-align:center;padding:calc(var(--pd) + 10px)}
-.s-hex .badge{margin:4px auto 0}
-
-/* 16. TERLAMBAT: border tebal, merah kalau ada yang telat */
-.s-stop{--sh:10px 10px 0 var(--ink);--shh:14px 14px 0 var(--ink);border-width:9px;align-items:center;justify-content:center;text-align:center}
-.s-stop.bad{background:var(--red);color:#fff;--ex:wig 3.2s 1.5s infinite}
+/* 8. AKTIF (todo) */
+.s-stamp{border:7px double var(--ink)!important;background:var(--c);--sh:5px 5px 0 var(--ink);align-items:center;justify-content:center;text-align:center}
+/* 9. HARI INI */
+.s-clip{--sh:6px 6px 0 var(--ink);--shh:9px 9px 0 var(--ink);border-top-width:16px!important;background:#fff repeating-linear-gradient(transparent 0 24px,rgba(0,0,0,.07) 24px 25px)}
+.s-clip::before{content:"";position:absolute;top:0;left:50%;width:36%;height:7px;margin-left:-18%;background:var(--ink)}
+/* 10. BESOK */
+.s-tag{--sh:0 0 0 transparent;--shh:5px 5px 0 var(--ink);background:var(--c);--chip:#fff;border-right-width:8px;border-bottom-width:8px}
+/* 11. BERIKUTNYA */
+.s-bub{--sh:-6px 6px 0 #fff,-6px 6px 0 3px var(--ink);--shh:-9px 9px 0 #fff,-9px 9px 0 3px var(--ink);background:var(--c);--chip:#fff}
+/* 12. KALENDER */
+.s-cal{--sh:0 6px 0 -2px #fff,0 6px 0 2px var(--ink);--shh:0 9px 0 -2px #fff,0 9px 0 2px var(--ink);text-align:center}
+.cal-h{margin:calc(-1*var(--pd)) calc(-1*var(--pd)) 0;padding:2px 0;background:var(--red);color:#fff;border-bottom:3px solid var(--ink);font:800 10px 'Archivo Black',Impact,sans-serif;text-transform:uppercase;letter-spacing:.5px}
+.gl .s-cal .n{font-size:26px}
+/* 13. TUGAS AKTIF */
+.s-stack{--sh:5px 5px 0 -1px #fff,5px 5px 0 3px var(--ink),10px 10px 0 -1px #fff,10px 10px 0 3px var(--ink);--shh:7px 7px 0 -1px #fff,7px 7px 0 3px var(--ink),13px 13px 0 -1px #fff,13px 13px 0 3px var(--ink)}
+/* 14. PRIORITAS */
+.s-haz{--sh:6px 6px 0 var(--ink);--shh:9px 9px 0 var(--ink);border-left-width:8px;padding-top:calc(var(--pd) + 8px);padding-bottom:calc(var(--pd) + 8px)}
+.s-haz::before,.s-haz::after{content:"";position:absolute;left:0;right:0;height:8px;background:repeating-linear-gradient(-45deg,var(--ink) 0 6px,var(--yellow) 6px 12px);background-size:200% 100%;animation:hazmove 3s linear infinite}
+.s-haz::before{top:0}
+.s-haz::after{bottom:0}
+/* 15. AKTIF (tugas) */
+.s-hex{--sh:6px 6px 0 var(--ink);background:var(--c);--chip:#fff;border-width:5px!important;outline:2px solid var(--ink);outline-offset:-7px;align-items:center;justify-content:center;text-align:center;padding:calc(var(--pd) + 6px)}
+/* 16. TERLAMBAT */
+.s-stop{--sh:7px 7px 0 var(--ink);--shh:10px 10px 0 var(--ink);border-width:6px!important;align-items:center;justify-content:center;text-align:center}
+.s-stop.bad{background:var(--red);color:#fff}
 .s-stop.bad .n,.s-stop.bad .sub{color:#fff}
-.s-stop .n{margin-top:2px}
-
-/* kotak kecil (2x2): rapatkan isi */
-.gl .sz2 .c-h span{font-size:9px;padding:1px 4px;letter-spacing:0}
-.gl .sz2 .c-h small{display:none}
-.gl .sz2.c .n,.gl .c.sz2 .n{font-size:clamp(14px,3.4vw,19px);margin-top:4px}
-.gl .c.sz2 .sub{font-size:10px}
-.c.sz2.s-price{border-right-width:10px}
-.c.sz2.s-stop{border-width:6px}
-.c.sz2.s-stamp{border-width:7px}
-.c.sz2.s-coin{border-width:5px;padding:8px}
-.c.sz2.s-hex{outline-offset:-9px;padding:calc(var(--pd) + 4px);border-width:5px}
-.c.sz2.s-cal .n{font-size:clamp(20px,5vw,28px)}
 
 /* isi */
 .c-h{position:relative;z-index:1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 6px;margin-bottom:2px}
@@ -833,10 +815,10 @@ main:hover .col,main .col:hover{flex-grow:0}
     var emp = hasMg ? 'Kosong' : (uid && errMg ? 'Gagal: ' + esc(errMg) : wait);
     var d0 = HARI[(now.getDay() + 6) % 7], d1 = HARI[(now.getDay() + 7) % 7];
 
-    /* ukuran kartu mengikuti banyaknya data: sedikit = kotak kecil */
-    function sz(n){ return n <= 1 ? 2 : n <= 3 ? 3 : 4; }
-    function szT(n){ return n <= 1 ? 2 : n <= 2 ? 3 : 4; }
-    var MX = { 2: 2, 3: 4, 4: 7 }, MB = { 2: 1, 3: 3, 4: 5 }, MT = { 2: 1, 3: 2, 4: 4 };
+    /* kartu = kotak persegi; sisi kotak mengikuti banyaknya data */
+    function sz(n){ return n < 1 ? 'S' : n <= 2 ? 'M' : 'L'; }
+    function szB(n){ return n < 1 ? 'S' : n <= 3 ? 'M' : 'L'; }
+    var MX = { S: 1, M: 2, L: 5 }, MB = { S: 1, M: 3, L: 5 }, MT = { S: 1, M: 2, L: 4 }, MH = { S: 1, M: 2, L: 4 };
 
     /* 1. keuangan */
     var TX = hasMg && Array.isArray(mg.tx) ? mg.tx : [], ym = iso(now).slice(0, 7), cats = {};
@@ -844,7 +826,7 @@ main:hover .col,main .col:hover{flex-grow:0}
     TX.forEach(function(x){
       if (x.type === 'out' && String(x.date).slice(0, 7) === ym){ var ck = x.cat || 'Lainnya'; cats[ck] = (cats[ck] || 0) + (Number(x.amt) || 0); }
     });
-    var topAll = Object.keys(cats).sort(function(a, b){ return cats[b] - cats[a]; }), kz = sz(topAll.length);
+    var topAll = Object.keys(cats).sort(function(a, b){ return cats[b] - cats[a]; }), kz = szB(topAll.length);
     var top = topAll.slice(0, MB[kz]), cmax = topAll.length ? cats[topAll[0]] : 1;
     var days = [], mx = 1;
     for (var i = 6; i >= 0; i--){
@@ -858,15 +840,15 @@ main:hover .col,main .col:hover{flex-grow:0}
       return '<div class="sd"><div class="sb"><i class="bi' + (d.a ? '' : ' z') + '" style="' + hh(d.a) + ';--d:' + j * 50 + 'ms"></i><i class="bo' + (d.b ? '' : ' z') + '" style="' + hh(d.b) + ';--d:' + j * 50 + 'ms"></i></div><u>' + d.l + '</u></div>';
     }).join('') + '</div>';
     var tot = f.inc + f.out, share = tot ? Math.round(f.inc / tot * 100) : 0;
-    var s0 = !hasMg || !TX.length ? 2 : TX.length >= 3 ? 4 : 3, nR = s0 === 4 ? 3 : s0 === 3 ? 2 : 0;
-    var cSaldo = card('wd s-receipt sz' + s0, URL_MG, 'Saldo', '', num(hasMg ? rp(f.bal) : '—') +
-      (s0 === 4 ? '<div class="sub">7 hari · <span class="g">▮ masuk</span> <span class="r">▮ keluar</span></div>' + spark : '') +
+    var s0 = !hasMg || TX.length < 3 ? 'M' : 'X', nR = s0 === 'X' ? 3 : Math.min(2, TX.length);
+    var cSaldo = card('wd s-receipt s' + s0, URL_MG, 'Saldo', '', num(hasMg ? rp(f.bal) : '—') +
+      (s0 === 'X' ? '<div class="sub">7 hari · <span class="g">▮ masuk</span> <span class="r">▮ keluar</span></div>' + spark : '') +
       (nR ? '<div class="perf"></div>' + list(recent.slice(0, nR).map(function(x){ return li((x.type === 'in' ? '+' : '-') + short(x.amt), x.cat || x.note || '—'); }), nR, emp, !!errMg) : ''));
-    var cKat = card('tl s-tab sz' + kz, URL_MG, 'Kategori', 'bln ini', top.length ? '<div class="hbs">' + top.map(function(k, j){
+    var cKat = card('tl s-tab s' + kz, URL_MG, 'Kategori', 'bln ini', top.length ? '<div class="hbs">' + top.map(function(k, j){
       return '<div class="hb"><div class="hl"><span>' + esc(k) + '</span><b>' + short(cats[k]) + '</b></div><s><i style="width:' + Math.max(6, Math.round(cats[k] / cmax * 100)) + '%;--d:' + j * 70 + 'ms"></i></s></div>';
     }).join('') + '</div>' : list([], 1, hasMg ? 'Belum ada' : emp, !!errMg));
-    var cIn = card('s-coin sz2', URL_MG, 'Pemasukan', '', num(hasMg ? 'Rp' + short(f.inc) : '—', 'g') + (hasMg && tot ? bar(share, 300, '#2fbf5b') : '') + '<div class="sub">bulan ini</div>');
-    var cOut = card('s-price sz2', URL_MG, 'Pengeluaran', '', num(hasMg ? 'Rp' + short(f.out) : '—', 'o') + (hasMg && tot ? bar(100 - share, 380, 'var(--red)') : '') + '<div class="sub">bulan ini</div>');
+    var cIn = card('s-coin sS', URL_MG, 'Masuk', '', num(hasMg ? 'Rp' + short(f.inc) : '—', 'g') + (hasMg && tot ? bar(share, 300, '#2fbf5b') : '') + '<div class="sub">bulan ini</div>');
+    var cOut = card('s-price sS', URL_MG, 'Keluar', '', num(hasMg ? 'Rp' + short(f.out) : '—', 'o') + (hasMg && tot ? bar(100 - share, 380, 'var(--red)') : '') + '<div class="sub">bulan ini</div>');
     var p0 = page(0, cSaldo, cIn, cOut, cKat);
 
     /* 2. todo list */
@@ -876,10 +858,10 @@ main:hover .col,main .col:hover{flex-grow:0}
     var all = todos.length + doneN, pct = all ? Math.round(doneN / all * 100) : 0;
     var tz = sz(todos.length), fz = sz(fl.length), tdErr = !!(uid && errTd);
     var p1 = page(1,
-      card('wd s-nb sz' + tz, URL_SEC, 'To do aktif', '', list(todos.map(function(t){ return '<li class="ck"><i></i><span>' + esc(t.text) + '</span></li>'; }), MX[tz], tdEmp, tdErr)),
-      card('s-arch sz3', URL_SEC, 'Progres', '', tdOk ? '<div class="row"><div class="ring" style="--v:' + pct + '"><b>' + pct + '%</b></div><div class="sub">' + doneN + ' dari ' + all + '<br>selesai</div></div>' : num('—')),
-      card('tl s-note sz' + fz, URL_SEC, 'Folder', '', list(fl.map(function(z){ return '<li class="fd"><span>' + esc(z.name) + '</span><b>' + z.n + '</b></li>'; }), MX[fz], tdEmp, tdErr)),
-      card('s-stamp sz2', URL_SEC, 'Aktif', '', num(tdOk ? todos.length : '—'))
+      card('wd s-nb s' + tz, URL_SEC, 'To do', '', list(todos.map(function(t){ return '<li class="ck"><i></i><span>' + esc(t.text) + '</span></li>'; }), MX[tz], tdEmp, tdErr)),
+      card('s-arch sM', URL_SEC, 'Progres', '', tdOk ? '<div class="row"><div class="ring" style="--v:' + pct + '"><b>' + pct + '%</b></div><div class="sub">' + doneN + ' dari ' + all + '<br>selesai</div></div>' : num('—')),
+      card('tl s-note s' + fz, URL_SEC, 'Folder', '', list(fl.map(function(z){ return '<li class="fd"><span>' + esc(z.name) + '</span><b>' + z.n + '</b></li>'; }), MX[fz], tdEmp, tdErr)),
+      card('s-stamp sS', URL_SEC, 'Aktif', '', num(tdOk ? todos.length : '—'))
     );
 
     /* 3. jadwal */
@@ -887,7 +869,7 @@ main:hover .col,main .col:hover{flex-grow:0}
     var hz = sz(a0.length), bz = sz(a1.length);
     var hm = pad(now.getHours()) + ':' + pad(now.getMinutes()), placed = false, tlh = '';
     var nowLi = '<li class="now"><b>' + hhmm(hm) + '</b><span>sekarang</span></li>';
-    a0.slice(0, MX[hz] - 1).forEach(function(it){
+    a0.slice(0, MH[hz]).forEach(function(it){
       if (!placed && it.time && it.time > hm){ tlh += nowLi; placed = true; }
       tlh += '<li class="ti' + (it.time && it.time < hm ? ' past' : '') + '">' + (it.time ? '<b>' + hhmm(it.time) + '</b>' : '') + '<span>' + esc(it.text) + '</span></li>';
     });
@@ -899,22 +881,22 @@ main:hover .col,main .col:hover{flex-grow:0}
       cd = mins >= 60 ? 'dalam ' + Math.floor(mins / 60) + ' j ' + (mins % 60) + ' m' : 'dalam ' + mins + ' m';
     } else if (a1[0]){ nx = a1[0]; nxw = 'Besok'; }
     var p2 = page(2,
-      card('s-bub sz3', URL_MG, 'Berikutnya', '', nx ? num(nx.text, 't') + '<div class="sub">' + nxw + (nx.time ? ' · ' + hhmm(nx.time) : '') + (cd ? '<br>' + cd : '') + '</div>' : num('—')),
-      card('wd s-clip sz' + hz, URL_MG, 'Hari ini', d0, a0.length ? '<ul class="tlx">' + tlh + '</ul>' : list([], 1, emp, !!errMg)),
-      card('s-cal sz2', URL_MG, '', '', '<div class="cal-h">' + BULAN[now.getMonth()] + ' ' + now.getFullYear() + '</div>' + num(now.getDate()) + '<div class="sub">' + d0 + '</div>'),
-      card('tl s-tag sz' + bz, URL_MG, 'Besok', d1, list(a1.map(function(i){ return li(i.time ? hhmm(i.time) : '', i.text); }), MX[bz], emp, !!errMg))
+      card('s-bub sM', URL_MG, 'Berikutnya', '', nx ? num(nx.text, 't') + '<div class="sub">' + nxw + (nx.time ? ' · ' + hhmm(nx.time) : '') + (cd ? '<br>' + cd : '') + '</div>' : num('—')),
+      card('wd s-clip s' + hz, URL_MG, 'Hari ini', '', a0.length ? '<ul class="tlx">' + tlh + '</ul>' : list([], 1, emp, !!errMg)),
+      card('s-cal sS', URL_MG, '', '', '<div class="cal-h">' + BULAN[now.getMonth()] + '</div>' + num(now.getDate()) + '<div class="sub">' + d0 + '</div>'),
+      card('tl s-tag s' + bz, URL_MG, 'Besok', '', list(a1.map(function(i){ return li(i.time ? hhmm(i.time) : '', i.text); }), MX[bz], emp, !!errMg))
     );
 
     /* 4. tugas */
     var act = hasMg ? tasks() : [];
     var hi = act.filter(function(t){ return t.prio === 2; });
     var late = act.filter(function(t){ return t.deadline && dayDiff(t.deadline) < 0; }).length;
-    var az = szT(act.length), pz = szT(hi.length);
+    var az = sz(act.length), pz = sz(hi.length);
     var p3 = page(3,
-      card('s-hex sz2', URL_MG, 'Aktif', '', hasMg ? '<div class="badge">' + act.length + '</div>' : num('—')),
-      card('wd s-stack sz' + az, URL_MG, 'Tugas aktif', act.length ? act.length + ' tugas' : '', list(act.map(trow), MT[az], emp, !!errMg)),
-      card('s-stop sz2' + (late ? ' bad' : ''), URL_MG, 'Terlambat', '', num(hasMg ? late : '—') + '<div class="sub">' + (late ? 'segera selesaikan' : hasMg ? 'aman semua' : '') + '</div>'),
-      card('tl s-haz sz' + pz, URL_MG, 'Prioritas', 'tinggi', list(hi.map(trow), MT[pz], hasMg ? 'Tidak ada' : emp, !!errMg))
+      card('s-hex sS', URL_MG, 'Aktif', '', hasMg ? '<div class="badge">' + act.length + '</div>' : num('—')),
+      card('wd s-stack s' + az, URL_MG, 'Tugas', '', list(act.map(trow), MT[az], emp, !!errMg)),
+      card('s-stop sS' + (late ? ' bad' : ''), URL_MG, 'Telat', '', num(hasMg ? late : '—') + '<div class="sub">' + (late ? 'segera selesaikan' : hasMg ? 'aman' : '') + '</div>'),
+      card('tl s-haz s' + pz, URL_MG, 'Prioritas', '', list(hi.map(trow), MT[pz], hasMg ? 'Tidak ada' : emp, !!errMg))
     );
 
     pgs.innerHTML = [p0, p1, p2, p3].map(function(h, n){ return '<div class="pg' + (seen[n] ? ' in still' : '') + '">' + h + '</div>'; }).join('');
@@ -923,7 +905,9 @@ main:hover .col,main .col:hover{flex-grow:0}
   }
 
   /* ---------- geser halaman ---------- */
+  function fit(){ var pp = pgs.children[idx], h = pp ? pp.offsetHeight : 0; if (h) vp.style.height = h + 'px'; }
   function mark(){
+    fit();
     tabs.forEach(function(t, i){ t.classList.toggle('on', i === idx); t.setAttribute('aria-selected', i === idx ? 'true' : 'false'); });
     dots.forEach(function(d, i){ d.classList.toggle('on', i === idx); });
     for (var i = 0; i < pgs.children.length; i++){
@@ -1005,9 +989,11 @@ main:hover .col,main .col:hover{flex-grow:0}
   dash.addEventListener('pointerdown', function(e){ if (e.pointerType !== 'mouse') setHold(true); });
   window.addEventListener('pointerup', function(e){ if (e.pointerType !== 'mouse' && hold) setHold(false); });
   window.addEventListener('pointercancel', function(e){ if (e.pointerType !== 'mouse' && hold) setHold(false); });
+  window.addEventListener('resize', fit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
   setInterval(function(){
     if (calm || hold || drag || document.hidden) return;
-    if (Date.now() - last >= 3000) go((idx + 1) % tabs.length);
+    if (Date.now() - last >= 6000) go((idx + 1) % tabs.length);
   }, 300);
 
   /* ---------- masuk / keluar ---------- */
