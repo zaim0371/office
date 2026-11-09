@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Zaim's Office</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://generativelanguage.googleapis.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -1119,16 +1120,16 @@ main:hover .col,main .col:hover{flex-grow:0}
 <script>
 /* Asisten Office: baca & ubah data Manager (manager_state) dan Secretary (secretary_*) lewat Gemini. */
 (function(){
-  var KEY = 'zn_gkey', MODELS = ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-flash-lite-latest'];
+  var KEY = 'zn_gkey', DEF_KEY = 'AQ.Ab8RN6JgUAC8wEYffvw1LXYovHuRcaP0Uz_PFbb0J0bqehLydA', MODELS = ['gemini-2.5-flash', 'gemini-flash-lite-latest', 'gemini-flash-latest'];
   var SITES = { manager:'https://zaim0371.github.io/manager/', secretary:'https://zaim0371.github.io/secretary/', workspace:'https://zaim0371.github.io/note/' };
   var DAYS = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'], PRIO = ['rendah','sedang','tinggi'];
   var COLN = ['lime','ungu','kuning','pink','tosca'], COL = ['#DFF65A','#D9D0FF','#FFE8A3','#FFC9DD','#BFF0E8'];
   var TBL = { notes:'secretary_notes', folders:'secretary_folders', todos:'secretary_todos', wish:'secretary_wishes' };
-  var A = { msgs:[], busy:false, model:'', D:null, dots:null }, mem = '';
+  var A = { msgs:[], busy:false, model:'', D:null, dots:null, at:0 }, mem = '';
   var $ = function(s){ return document.querySelector(s); };
   var sheet = $('#aiSheet'), box = $('#aiM'), pop = $('#aiPop');
 
-  function key(){ try{ return localStorage.getItem(KEY) || mem; }catch(e){ return mem; } }
+  function key(){ try{ return localStorage.getItem(KEY) || mem || DEF_KEY; }catch(e){ return mem || DEF_KEY; } }
   function str(v){ return String(v == null ? '' : v).trim(); }
   function pad(n){ return String(n).padStart(2, '0'); }
   function iso(d){ return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
@@ -1163,7 +1164,7 @@ main:hover .col,main .col:hover{flex-grow:0}
     var k = !!key(), setting = !$('#aiKey').hidden;
     $('#aiKey').hidden = !(setting || !k); $('#aiDel').hidden = !k;
   }
-  function open(){ sheet.classList.add('open'); $('#aiKey').hidden = true; view(); suggest(); setTimeout(function(){ (key() ? $('#aiI') : $('#aiKi')).focus(); }, 300); }
+  function open(){ sheet.classList.add('open'); $('#aiKey').hidden = true; view(); suggest(); fresh().catch(function(){}); setTimeout(function(){ (key() ? $('#aiI') : $('#aiKi')).focus(); }, 300); }
   function close(){ sheet.classList.remove('open'); if (document.activeElement) document.activeElement.blur(); }
   function closePop(){ pop.classList.remove('open'); }
 
@@ -1178,7 +1179,9 @@ main:hover .col,main .col:hover{flex-grow:0}
     if (!Array.isArray(m.tx)) m.tx = []; if (!Array.isArray(m.tasks)) m.tasks = []; if (!Array.isArray(m.media)) m.media = [];
     if (!Array.isArray(m.sched) || m.sched.length !== 7) m.sched = [[],[],[],[],[],[],[]];
     A.D = { mg:m, notes:r[1].data || [], folders:r[2].data || [], todos:r[3].data || [], wish:r[4].data || [] };
+    A.at = Date.now();
   }
+  async function fresh(){ if (A.D && Date.now() - A.at < 30000) return; await load(); }
   async function saveMg(){
     var r = await window.OFC.sb.from('manager_state').upsert({ user_id:window.OFC.uid(), data:A.D.mg, updated_at:new Date().toISOString() });
     if (r.error) throw { m:r.error.message };
@@ -1539,8 +1542,8 @@ CARA MEMAHAMI PERMINTAAN
         transaksi:m.tx.slice().sort(function(p, q){ return String(q.date).localeCompare(String(p.date)) || (Number(q.id) || 0) - (Number(p.id) || 0); }).slice(0, 120)
           .map(function(x){ return { id:x.id, tgl:x.date, jenis:x.type === 'in' ? 'masuk' : 'keluar', jumlah:x.amt, kategori:x.cat || '', catatan:x.note || '' }; }) },
       jadwal:DAYS.map(function(n, i){ return { hari:n, kegiatan:(m.sched[i] || []).filter(function(it){ return !it.taskId; }).map(function(it){ return { id:it.id, teks:it.text, jam:it.time || '', tipe:it.date ? 'sekali' : 'tiap minggu', tanggal:it.date || '', sampai:it.until || 'permanen' }; }) }; }),
-      tugas:m.tasks.slice(-100).map(function(t){ return { id:t.id, judul:t.title, catatan:t.note || '', deadline:t.deadline || '', jam:t.time || '', kerjakan_pada:t.doOn || '', jam_kerjakan:t.doTime || '', prioritas:PRIO[t.prio] || '', selesai:!!t.done }; }),
-      note:D.notes.slice(-40).map(function(n){ var b = n.body || ''; return { id:n.id, judul:n.title, isi:b.slice(0, 500), warna:COLN[COL.indexOf(n.color)] || '' }; }),
+      tugas:m.tasks.slice(-60).map(function(t){ return { id:t.id, judul:t.title, catatan:t.note || '', deadline:t.deadline || '', jam:t.time || '', kerjakan_pada:t.doOn || '', jam_kerjakan:t.doTime || '', prioritas:PRIO[t.prio] || '', selesai:!!t.done }; }),
+      note:D.notes.slice(-25).map(function(n){ var b = n.body || ''; return { id:n.id, judul:n.title, isi:b.slice(0, 300), warna:COLN[COL.indexOf(n.color)] || '' }; }),
       folder:D.folders.map(function(f){ return { id:f.id, nama:f.name }; }),
       todo:D.todos.map(function(t){ return { id:t.id, folder:fn[t.fid] || '', folder_id:t.fid, teks:t.text, selesai:!!t.done }; }),
       wish:D.wish.map(function(w){ return { id:w.id, nama:w.name, harga:w.price, prioritas:['', 'tinggi', 'sedang', 'rendah'][w.prio] || '', didapat:!!w.got }; })
@@ -1549,18 +1552,28 @@ CARA MEMAHAMI PERMINTAAN
   }
 
   async function call(obj){
-    var last = { s:404, m:'Model tidak ditemukan' };
-    for (var mi of (A.model ? [A.model] : MODELS)){
+    var models = A.model ? [A.model].concat(MODELS.filter(function(x){ return x !== A.model; })) : MODELS;
+    var t0 = Date.now(), last = { s:404, m:'Model tidak ditemukan' };
+    for (var mi of models){
       for (var th of [true, false]){
-        var body = JSON.stringify(Object.assign({}, obj, { generationConfig:th ? { temperature:.2, thinkingConfig:{ thinkingBudget:1024 } } : { temperature:.2 } }));
-        var r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + mi + ':generateContent', { method:'POST', headers:{ 'content-type':'application/json', 'x-goog-api-key':key() }, body:body });
+        if (Date.now() - t0 > 75000) throw { s:408, m:'Terlalu lama' };
+        var gc = Object.assign({ temperature:.2, maxOutputTokens:4096 }, th ? { thinkingConfig:{ thinkingBudget:0 } } : {});   // tanpa thinking = jauh lebih cepat
+        var body = JSON.stringify(Object.assign({}, obj, { generationConfig:gc }));
+        var ac = new AbortController(), tm = setTimeout(function(){ ac.abort(); }, 20000), r;
+        try{ r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + mi + ':generateContent', { method:'POST', headers:{ 'content-type':'application/json', 'x-goog-api-key':key() }, body:body, signal:ac.signal }); }
+        catch(e){
+          clearTimeout(tm);
+          if (e && e.name === 'AbortError'){ last = { s:408, m:'Terlalu lama' }; if (mi === A.model) A.model = ''; break; }
+          throw e;
+        }
+        clearTimeout(tm);
         if (r.ok){ A.model = mi; return r.json(); }
         var j = await r.json().catch(function(){ return null; });
         last = { s:r.status, m:(j && j.error && j.error.message) || '' };
         if (r.status === 400 && th && !/API key/i.test(last.m)) continue;
         break;
       }
-      if ([404, 429, 500, 503].indexOf(last.s) < 0 && !(last.s === 400 && !/API key/i.test(last.m))) throw last;
+      if ([404, 408, 429, 500, 503].indexOf(last.s) < 0 && !(last.s === 400 && !/API key/i.test(last.m))) throw last;
     }
     throw last;
   }
@@ -1578,9 +1591,9 @@ CARA MEMAHAMI PERMINTAAN
     var base = A.msgs.length, acted = false;
     add('u', text); A.dots = add('a', '…');
     try{
-      await load();
+      await fresh();
       A.msgs.push({ role:'user', parts:[{ text:text }] });
-      while (A.msgs.length > 24){ A.msgs.shift(); while (A.msgs.length && !(A.msgs[0].role === 'user' && A.msgs[0].parts[0] && A.msgs[0].parts[0].text !== undefined)) A.msgs.shift(); }
+      while (A.msgs.length > 14){ A.msgs.shift(); while (A.msgs.length && !(A.msgs[0].role === 'user' && A.msgs[0].parts[0] && A.msgs[0].parts[0].text !== undefined)) A.msgs.shift(); }
       for (var i = 0; i < 12; i++){
         var d = await call({ systemInstruction:{ parts:[{ text:system() }] }, tools:TOOLS, contents:A.msgs });
         var c = d.candidates && d.candidates[0], ps = (c && c.content && c.content.parts) || [];
@@ -1592,11 +1605,16 @@ CARA MEMAHAMI PERMINTAAN
         acted = true; var out = [];
         for (var f of fc) out.push({ functionResponse:{ name:f.functionCall.name, response:{ result:await run(f.functionCall.name, f.functionCall.args || {}) } } });
         A.msgs.push({ role:'user', parts:out });
+        // semua tool sukses & tidak butuh id baru: tidak perlu panggilan AI kedua hanya untuk merangkum
+        if (out.every(function(x){ return /^ok/.test(String(x.functionResponse.response.result)); }) &&
+            !fc.some(function(f){ var q = f.functionCall.args || {}; return q.area === 'folder' && q.aksi === 'tambah'; })){
+          A.msgs.push({ role:'model', parts:[{ text:tx || 'Selesai.' }] }); break;
+        }
       }
     }catch(e){
       if (!acted) A.msgs.length = base;
       var m = String(e && e.m || '');
-      add('a', /API key/i.test(m) || (e && (e.s === 401 || e.s === 403)) ? 'Key tidak valid' : e && e.s === 429 ? 'Terlalu sering, tunggu'
+      add('a', /API key/i.test(m) || (e && (e.s === 401 || e.s === 403)) ? 'Key tidak valid' : e && e.s === 408 ? 'Server terlalu lama, coba kirim lagi' : e && e.s === 429 ? 'Terlalu sering, tunggu'
         : (e instanceof TypeError || /fetch|network/i.test(String(e && e.message))) ? 'Jaringan gagal' : e && e.s ? 'Gagal (' + e.s + ') ' + m.slice(0, 90) : (m || 'Error') );
     }
     A.dots.remove(); A.dots = null; A.busy = false;
