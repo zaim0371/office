@@ -453,7 +453,7 @@ a.w:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
   var sb = window.supabase ? window.supabase.createClient(SB_URL, SB_KEY) : null;
   var uid = null, mg = null, todos = [], todoN = 0, loaded = false, failed = false, errMg = '', errTd = '';
   var busy = false, again = false, tmr = 0, chan = null;
-  var tk = null, tx = 0, loopW = 0, held = false, resumeAt = 0, lastT = 0, SPEED = 60;
+  var tk = null, tx = 0, loopW = 0, held = false, resumeAt = 0, lastT = 0, SPEED = 110;
   var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   function measure(){
     if (!tk) { loopW = 0; return; }
@@ -486,7 +486,7 @@ a.w:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
   }
   function release(){
     if (!dragging) return;
-    dragging = false; held = false; resumeAt = Date.now() + 3000;
+    dragging = false; held = false; resumeAt = Date.now() + 500;
     dash.classList.remove('grab');
   }
   dash.addEventListener('pointerdown', hold);
