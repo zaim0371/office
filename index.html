@@ -1129,7 +1129,11 @@ main:hover .col,main .col:hover{flex-grow:0}
   var $ = function(s){ return document.querySelector(s); };
   var sheet = $('#aiSheet'), box = $('#aiM'), pop = $('#aiPop');
 
-  function key(){ try{ return localStorage.getItem(KEY) || mem || ''; }catch(e){ return mem || ''; } }
+  function key(){ try{ return (localStorage.getItem(KEY) || mem || '').trim(); }catch(e){ return (mem || '').trim(); } }
+  /* key "AIza..." = Google AI Studio; key "AQ...." = Vertex AI (express mode) -> endpoint berbeda */
+  function vertex(){ return !/^AIza/.test(key()); }
+  var V_MODELS = ['gemini-2.5-flash-lite','gemini-2.5-flash','gemini-2.0-flash'], V_IMG = ['gemini-2.5-flash','gemini-2.5-flash-lite','gemini-2.0-flash'];
+  function gUrl(m){ return (vertex() ? 'https://aiplatform.googleapis.com/v1/publishers/google/models/' : 'https://generativelanguage.googleapis.com/v1beta/models/') + m + ':generateContent?key=' + encodeURIComponent(key()); }
   function str(v){ return String(v == null ? '' : v).trim(); }
   function pad(n){ return String(n).padStart(2, '0'); }
   function iso(d){ return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
@@ -1556,7 +1560,7 @@ CARA MEMAHAMI PERMINTAAN
     const gc=Object.assign({temperature:.2,maxOutputTokens:4096},obj.generationConfig||{},th?{thinkingConfig:{thinkingBudget:tb}}:{});
     const tm=setTimeout(()=>ctl.abort(),lim);
     let r;
-    try{r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+m+':generateContent',{method:'POST',headers:{'content-type':'application/json','x-goog-api-key':key()},body:JSON.stringify({...obj,generationConfig:gc}),signal:ctl.signal})}
+    try{r=await fetch(gUrl(m),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({...obj,generationConfig:gc}),signal:ctl.signal})}
     catch(e){clearTimeout(tm);if(e&&e.name==='AbortError')throw {s:408,m:'Terlalu lama'};throw e}
     clearTimeout(tm);
     if(r.ok)return {m,d:await r.json()};
@@ -1569,7 +1573,7 @@ CARA MEMAHAMI PERMINTAAN
 function call(obj,tb){
   if(tb===undefined)tb=0;   // tanpa "thinking" = jauh lebih cepat
   const img=JSON.stringify(obj).indexOf('"inlineData"')>-1;
-  const base=img?MODELS_IMG:MODELS;
+  const base=vertex()?(img?V_IMG:V_MODELS):(img?MODELS_IMG:MODELS);
   const list=!img&&A.model?[A.model].concat(base.filter(x=>x!==A.model)):base;
   const lim=img?35000:15000,hedge=img?7000:2500;
   return new Promise((resolve,reject)=>{
