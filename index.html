@@ -238,6 +238,8 @@ footer:hover .track{animation-play-state:paused}
   -webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:pan-y;
 }
 .tk .w{flex:0 0 270px;-webkit-user-drag:none}
+.dash .tk{cursor:grab}.dash.grab .tk{cursor:grabbing}
+.w li.err span{white-space:normal;overflow:visible;font-size:12px;line-height:1.3}
 .w{
   --c:var(--yellow);
   display:block;min-width:0;color:var(--ink);text-decoration:none;
@@ -451,7 +453,7 @@ a.w:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
   var sb = window.supabase ? window.supabase.createClient(SB_URL, SB_KEY) : null;
   var uid = null, mg = null, todos = [], todoN = 0, loaded = false, failed = false, errMg = '', errTd = '';
   var busy = false, again = false, tmr = 0, chan = null;
-  var tk = null, tx = 0, loopW = 0, held = false, resumeAt = 0, lastT = 0, SPEED = 22;
+  var tk = null, tx = 0, loopW = 0, held = false, resumeAt = 0, lastT = 0, SPEED = 60;
   var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   function measure(){
     if (!tk) { loopW = 0; return; }
@@ -469,14 +471,31 @@ a.w:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
     if (tx <= -loopW) tx += loopW;
     place();
   }
-  var downT = 0;
-  function hold(){ held = true; downT = Date.now(); }
-  function release(){ if (held){ held = false; resumeAt = Date.now() + 3000; } }
+  var downT = 0, dragging = false, moved = false, sx = 0, stx = 0;
+  function wrapX(){ if (!loopW) return; while (tx > 0) tx -= loopW; while (tx <= -loopW) tx += loopW; }
+  function hold(e){
+    if (!tk || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    held = true; dragging = true; moved = false; downT = Date.now(); sx = e.clientX; stx = tx;
+    dash.classList.add('grab');
+  }
+  function move(e){
+    if (!dragging) return;
+    var dx = e.clientX - sx;
+    if (!moved && Math.abs(dx) < 6) return;
+    moved = true; tx = stx + dx; wrapX(); place();
+  }
+  function release(){
+    if (!dragging) return;
+    dragging = false; held = false; resumeAt = Date.now() + 3000;
+    dash.classList.remove('grab');
+  }
   dash.addEventListener('pointerdown', hold);
-  dash.addEventListener('pointerup', release);
-  dash.addEventListener('pointercancel', release);
-  dash.addEventListener('pointerleave', release);
-  dash.addEventListener('click', function(e){ if (Date.now() - downT > 350 && e.target.closest && e.target.closest('a.w')) e.preventDefault(); }, true);
+  window.addEventListener('pointermove', move);
+  window.addEventListener('pointerup', release);
+  window.addEventListener('pointercancel', release);
+  dash.addEventListener('click', function(e){
+    if ((moved || Date.now() - downT > 350) && e.target.closest && e.target.closest('a.w')) e.preventDefault();
+  }, true);
   dash.addEventListener('contextmenu', function(e){ if (tk) e.preventDefault(); });
   window.addEventListener('resize', function(){ measure(); });
   requestAnimationFrame(frame);
@@ -515,12 +534,15 @@ a.w:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
     return n + ' hr';
   }
 
+  function errMsg(m){
+    return /permission denied/i.test(m) ? 'Izin tabel ditolak. Jalankan GRANT SELECT di Supabase.' : 'Gagal: ' + esc(m);
+  }
   function card(cls, href, title, badge, body){
     return '<a class="w ' + cls + '" href="' + href + '"><div class="w-h"><h3>' + title + '</h3><small>' + esc(badge) + '</small></div>' + body + '</a>';
   }
   function li(tag, text){ return '<li>' + (tag ? '<b>' + esc(tag) + '</b>' : '') + '<span>' + esc(text) + '</span></li>'; }
-  function list(items, max, empty){
-    if (!items.length) return '<ul>' + '<li class="none"><span>' + empty + '</span></li></ul>';
+  function list(items, max, empty, isErr){
+    if (!items.length) return '<ul>' + '<li class="none' + (isErr ? ' err' : '') + '"><span>' + empty + '</span></li></ul>';
     var h = items.slice(0, max).join('');
     if (items.length > max) h += '<li class="more"><span>+' + (items.length - max) + ' lagi</span></li>';
     return '<ul>' + h + '</ul>';
@@ -535,7 +557,7 @@ a.w:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
       (mg ? '<div class="w-sub"><i>↓ ' + rp(f.inc) + '</i><i class="o">↑ ' + rp(f.out) + '</i></div>' : '<div class="w-sub">' + (errMg ? 'Gagal: ' + esc(errMg) : 'Memuat…') + '</div>'));
 
     dash_ += card('w-todo', URL_SEC, 'To Do', todoN ? todoN + ' aktif' : '',
-      list(todos.map(function(t){ return li('', t.text); }), 3, errTd ? 'Gagal: ' + errTd : (loaded ? 'Kosong' : 'Memuat…')));
+      list(todos.map(function(t){ return li('', t.text); }), 3, errTd ? errMsg(errTd) : (loaded ? 'Kosong' : 'Memuat…'), !!errTd));
 
     var today = agenda(0), shown = today, label = 'Hari ini';
     if (!today.length){ shown = agenda(1); label = shown.length ? 'Besok' : 'Hari ini'; }
@@ -580,7 +602,7 @@ a.w:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
           sb.from('secretary_todos').select('*').order('id').limit(1000)
         ]);
         errMg = r[0].error ? String(r[0].error.message || 'error').slice(0, 40) : '';
-        errTd = r[1].error ? String(r[1].error.message || 'error').slice(0, 40) : '';
+        errTd = r[1].error ? String(r[1].error.message || 'error').slice(0, 80) : '';
         failed = !!errMg;
         if (!r[0].error) mg = r[0].data && r[0].data.data && typeof r[0].data.data === 'object' ? r[0].data.data : null;
         if (!r[1].error){
