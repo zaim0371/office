@@ -303,6 +303,63 @@ a.w:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
 }
+
+/* ===== ASISTEN AI ===== */
+.aifab{
+  position:fixed;right:18px;bottom:72px;z-index:60;width:60px;height:60px;cursor:pointer;
+  background:var(--pink);border:var(--bd);box-shadow:6px 6px 0 var(--ink);color:var(--ink);
+  display:grid;place-items:center;transition:transform .12s,box-shadow .12s;
+}
+.aifab svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linejoin:miter}
+.aifab:hover{transform:translate(-2px,-2px);box-shadow:9px 9px 0 var(--ink)}
+.aifab:active{transform:translate(5px,5px);box-shadow:0 0 0 var(--ink)}
+.aiov{position:fixed;inset:0;z-index:90;display:none;background:rgba(17,17,17,.6);align-items:flex-end;justify-content:center}
+.aiov.open{display:flex}
+#aiPop{z-index:110;align-items:center;padding:16px}
+.aip{
+  width:min(580px,100%);height:min(80vh,680px);display:flex;flex-direction:column;
+  background:var(--paper);border:var(--bd);border-bottom:0;box-shadow:0 -8px 0 var(--ink);
+  padding:14px 14px calc(14px + env(safe-area-inset-bottom,0px));
+  animation:rise .35s cubic-bezier(.2,1.3,.4,1) both;
+}
+.aih{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.aih h2{font-family:'Archivo Black',Impact,sans-serif;font-size:24px;letter-spacing:-1px;text-transform:uppercase;background:var(--yellow);border:4px solid var(--ink);padding:0 10px}
+.aib{
+  font:700 13px 'Space Grotesk',system-ui,sans-serif;cursor:pointer;padding:6px 12px;
+  background:#fff;color:var(--ink);border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);
+}
+.aib:active{transform:translate(3px,3px);box-shadow:none}
+.aib.go{background:var(--green)}
+.aihb{display:flex;gap:8px}
+.aik{display:flex;gap:8px;margin-bottom:10px}
+.aik[hidden]{display:none}
+.aik input,.aif input{
+  flex:1;min-width:0;font:600 15px 'Space Grotesk',system-ui,sans-serif;padding:9px 10px;
+  background:#fff;color:var(--ink);border:4px solid var(--ink);
+}
+.aim{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:2px 2px 10px}
+.aim .m{max-width:86%;padding:8px 12px;border:3px solid var(--ink);font-weight:600;font-size:14.5px;line-height:1.35;white-space:pre-wrap;overflow-wrap:anywhere}
+.aim .u{align-self:flex-end;background:var(--pink);box-shadow:3px 3px 0 var(--ink)}
+.aim .a{align-self:flex-start;background:#fff;box-shadow:3px 3px 0 var(--ink)}
+.aim .t{align-self:flex-start;background:var(--green);font-size:12.5px;padding:3px 9px;border-width:2px}
+.aim .chips{display:flex;flex-wrap:wrap;gap:8px}
+.aid i{display:inline-block;width:8px;height:8px;margin:0 2px;background:var(--ink);animation:blink .9s steps(2) infinite}
+.aid i:nth-child(2){animation-delay:.15s}.aid i:nth-child(3){animation-delay:.3s}
+.aif{display:flex;gap:8px;padding-top:8px;border-top:4px solid var(--ink)}
+.aipop{
+  width:min(640px,100%);max-height:82vh;display:flex;flex-direction:column;
+  background:var(--yellow);border:var(--bd);box-shadow:12px 12px 0 var(--ink);padding:16px;
+  animation:rise .35s cubic-bezier(.2,1.3,.4,1) both;
+}
+.aipop .aih h2{background:#fff;font-size:20px}
+.aitw{overflow:auto;background:#fff;border:4px solid var(--ink)}
+.aitw table{border-collapse:collapse;width:100%;font-size:13.5px;font-weight:600}
+.aitw th{position:sticky;top:0;background:var(--ink);color:var(--paper);text-align:left;padding:7px 10px;white-space:nowrap;font-family:'Archivo Black',Impact,sans-serif;font-size:12px;text-transform:uppercase}
+.aitw td{padding:7px 10px;border-top:2px solid var(--ink);vertical-align:top}
+.aitw tr:nth-child(even) td{background:var(--paper)}
+.aipop p{font-weight:700;font-size:14px;margin-top:10px;white-space:pre-wrap}
+.aipop .none{padding:14px;font-weight:700}
+@media (max-width:760px){.aifab{right:14px;bottom:66px;width:54px;height:54px}}
 </style>
 </head>
 <body>
@@ -641,6 +698,7 @@ a.w:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
 
   if (!sb){ dash.innerHTML = '<div class="w w-login"><p>Pustaka Supabase gagal dimuat.</p></div>'; return; }
 
+  window.OFC = { sb: sb, uid: function(){ return uid; }, reload: load };
   outBtn.addEventListener('click', function(){ sb.auth.signOut(); });
   sb.auth.onAuthStateChange(function(ev, session){
     if (ev === 'SIGNED_OUT') stop();
@@ -654,5 +712,499 @@ a.w:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
   setInterval(function(){ if (uid && !document.hidden){ draw(); load(); } }, 60000);
 })();
 </script>
+
+<button class="aifab" id="aiFab" type="button" aria-label="Asisten"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg></button>
+<div class="aiov" id="aiSheet" role="dialog" aria-modal="true" aria-label="Asisten">
+  <div class="aip">
+    <div class="aih"><h2>Asisten</h2><span class="aihb"><button class="aib" id="aiGear" type="button" aria-label="Key">⚙</button><button class="aib" id="aiX" type="button">Tutup</button></span></div>
+    <div class="aik" id="aiKey" hidden><input id="aiKi" type="password" placeholder="API key" autocomplete="off"><button class="aib go" id="aiSave" type="button">Simpan</button><button class="aib" id="aiDel" type="button">Hapus</button></div>
+    <div class="aim" id="aiM"></div>
+    <div class="aif"><input id="aiI" placeholder="Tanya atau perintah" autocomplete="off"><button class="aib go" id="aiGo" type="button">Kirim</button></div>
+  </div>
+</div>
+<div class="aiov" id="aiPop" role="dialog" aria-modal="true"><div class="aipop"><div class="aih"><h2 id="aiPt"></h2><button class="aib" id="aiPx" type="button">✕</button></div><div id="aiPb"></div></div></div>
+
+<script>
+/* Asisten Office: baca & ubah data Manager (manager_state) dan Secretary (secretary_*) lewat Gemini. */
+(function(){
+  var KEY = 'zn_gkey', MODELS = ['gemini-flash-lite-latest', 'gemini-flash-latest', 'gemini-2.5-flash'];
+  var SITES = { manager:'https://zaim0371.github.io/manager/', secretary:'https://zaim0371.github.io/secretary/', workspace:'https://zaim0371.github.io/note/' };
+  var DAYS = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'], PRIO = ['rendah','sedang','tinggi'];
+  var COLN = ['lime','ungu','kuning','pink','tosca'], COL = ['#DFF65A','#D9D0FF','#FFE8A3','#FFC9DD','#BFF0E8'];
+  var TBL = { notes:'secretary_notes', folders:'secretary_folders', todos:'secretary_todos', wish:'secretary_wishes' };
+  var A = { msgs:[], busy:false, model:'', D:null, dots:null }, mem = '';
+  var $ = function(s){ return document.querySelector(s); };
+  var sheet = $('#aiSheet'), box = $('#aiM'), pop = $('#aiPop');
+
+  function key(){ try{ return localStorage.getItem(KEY) || mem; }catch(e){ return mem; } }
+  function str(v){ return String(v == null ? '' : v).trim(); }
+  function pad(n){ return String(n).padStart(2, '0'); }
+  function iso(d){ return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function today(){ return iso(new Date()); }
+  function isDate(v){ return /^\d{4}-\d{2}-\d{2}$/.test(v) && !isNaN(new Date(v + 'T00:00')); }
+  function isTime(v){ return /^\d{2}:\d{2}$/.test(v); }
+  function esc(t){ var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; }
+  function rp(n){ n = Math.round(Number(n) || 0); return (n < 0 ? '-' : '') + 'Rp' + Math.abs(n).toLocaleString('id-ID'); }
+  var _n = 0; function nid(){ _n = Math.max(Date.now(), _n + 10); return _n; }
+  function uid36(){ return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+  function idsOf(a){ return (Array.isArray(a.ids) ? a.ids : [a.ids !== undefined ? a.ids : a.id]).map(str).filter(Boolean); }
+  function sum(a, t){ return a.filter(function(x){ return x.type === t; }).reduce(function(s, x){ return s + (Number(x.amt) || 0); }, 0); }
+
+  /* ---------- UI chat ---------- */
+  function add(c, t){
+    var el = document.createElement('div'); el.className = 'm ' + c;
+    if (t === '…') el.innerHTML = '<span class="aid"><i></i><i></i><i></i></span>'; else el.textContent = t;
+    box.insertBefore(el, A.dots && A.dots.parentNode === box ? A.dots : null);
+    box.scrollTop = box.scrollHeight; return el;
+  }
+  function say(t){ add('t', '✓ ' + t); }
+  function suggest(){
+    if (box.children.length) return;
+    box.innerHTML = '<div class="chips">' +
+      '<button class="aib" data-s="Berapa saldo dan pengeluaran bulan ini?">Saldo</button>' +
+      '<button class="aib" data-s="Tampilkan tugas aktif di popup">Tugas</button>' +
+      '<button class="aib" data-s="Tampilkan semua to do di popup">To do</button>' +
+      '<button class="aib" data-s="Apa jadwal hari ini dan besok?">Jadwal</button>' +
+      '<button class="aib" data-p="Buka ">Buka web</button></div>';
+  }
+  function view(){
+    var k = !!key(), setting = !$('#aiKey').hidden;
+    $('#aiKey').hidden = !(setting || !k); $('#aiDel').hidden = !k;
+  }
+  function open(){ sheet.classList.add('open'); $('#aiKey').hidden = true; view(); suggest(); setTimeout(function(){ (key() ? $('#aiI') : $('#aiKi')).focus(); }, 300); }
+  function close(){ sheet.classList.remove('open'); if (document.activeElement) document.activeElement.blur(); }
+  function closePop(){ pop.classList.remove('open'); }
+
+  /* ---------- data ---------- */
+  async function load(){
+    var O = window.OFC, sb = O && O.sb, u = O && O.uid();
+    if (!sb || !u) throw { m:'Masuk dulu' };
+    var r = await Promise.all([sb.from('manager_state').select('data').eq('user_id', u).maybeSingle()]
+      .concat(Object.keys(TBL).map(function(k){ return sb.from(TBL[k]).select('*').order('id').limit(1000); })));
+    r.forEach(function(x){ if (x.error) throw { m:x.error.message }; });
+    var m = r[0].data && r[0].data.data && typeof r[0].data.data === 'object' ? r[0].data.data : {};
+    if (!Array.isArray(m.tx)) m.tx = []; if (!Array.isArray(m.tasks)) m.tasks = []; if (!Array.isArray(m.media)) m.media = [];
+    if (!Array.isArray(m.sched) || m.sched.length !== 7) m.sched = [[],[],[],[],[],[],[]];
+    A.D = { mg:m, notes:r[1].data || [], folders:r[2].data || [], todos:r[3].data || [], wish:r[4].data || [] };
+  }
+  async function saveMg(){
+    var r = await window.OFC.sb.from('manager_state').upsert({ user_id:window.OFC.uid(), data:A.D.mg, updated_at:new Date().toISOString() });
+    if (r.error) throw { m:r.error.message };
+  }
+  function row(k, x){
+    if (k === 'notes') return { id:x.id, title:x.title || '', body:x.body || '', color:x.color, ts:Number(x.ts) || 0 };
+    if (k === 'folders') return { id:x.id, name:x.name, color:x.color };
+    if (k === 'todos') return { id:x.id, fid:x.fid, text:x.text, done:!!x.done, ts:Number(x.ts) || 0, dt:x.dt || null };
+    return { id:x.id, name:x.name, price:Number(x.price) || 0, prio:x.prio || 2, got:!!x.got };
+  }
+  async function put(k, xs){
+    var r = await window.OFC.sb.from(TBL[k]).upsert(xs.map(function(x){ return row(k, x); }), { onConflict:'id' });
+    if (r.error) throw { m:r.error.message };
+  }
+  async function rm(k, ids){
+    if (!ids.length) return;
+    var r = await window.OFC.sb.from(TBL[k]).delete().in('id', ids);
+    if (r.error) throw { m:r.error.message };
+  }
+
+  /* ---------- tugas ↔ jadwal (sama seperti Manager) ---------- */
+  function syncTask(t){
+    var m = A.D.mg;
+    m.sched.forEach(function(a, d){ m.sched[d] = a.filter(function(it){ return it.taskId !== t.id; }); });
+    t.synced = true; if (t.done) return;
+    function put_(kind, date, time, text){
+      var d = (new Date(date + 'T00:00').getDay() + 6) % 7;
+      m.sched[d].push({ id:t.id + (kind === 'dl' ? 1 : 0), taskId:t.id, kind:kind, text:text, date:date, until:date, time:time || '' });
+    }
+    if (t.doOn) put_('do', t.doOn, t.doTime, 'Kerjakan tugas "' + t.title + '"');
+    if (t.deadline) put_('dl', t.deadline, t.time, 'Deadline "' + t.title + '"');
+  }
+  function taskFields(t, a){
+    if (a.teks !== undefined){ if (!str(a.teks)) return 'judul kosong'; t.title = str(a.teks); }
+    if (a.isi !== undefined) t.note = str(a.isi);
+    if (a.deadline !== undefined) t.deadline = str(a.deadline);
+    if (a.jam !== undefined) t.time = str(a.jam);
+    if (a.kerjakan_pada !== undefined) t.doOn = str(a.kerjakan_pada);
+    if (a.jam_kerjakan !== undefined) t.doTime = str(a.jam_kerjakan);
+    if (a.prioritas !== undefined){ var p = PRIO.indexOf(str(a.prioritas).toLowerCase()); if (p < 0) return 'prioritas: rendah, sedang, tinggi'; t.prio = p; }
+    if (a.selesai !== undefined) t.done = !!a.selesai;
+    if ((t.deadline && !isDate(t.deadline)) || (t.doOn && !isDate(t.doOn))) return 'tanggal tidak valid, pakai YYYY-MM-DD';
+    if ((t.time && !isTime(t.time)) || (t.doTime && !isTime(t.doTime))) return 'jam tidak valid, pakai HH:MM';
+    if (!t.deadline) t.time = ''; if (!t.doOn) t.doTime = '';
+    if (t.deadline && t.doOn && t.doOn > t.deadline) return 'waktu mengerjakan melewati deadline';
+    return '';
+  }
+
+  /* ---------- ubah data ---------- */
+  async function mKeu(a, ak, ids){
+    var m = A.D.mg, x;
+    if (ak === 'tambah'){
+      var j = str(a.jenis); if (j !== 'masuk' && j !== 'keluar') return 'jenis: masuk atau keluar';
+      var n = Math.abs(Number(a.jumlah)); if (!n) return 'jumlah tidak valid';
+      var d = str(a.tanggal) || today(); if (!isDate(d)) return 'tanggal tidak valid';
+      x = { id:nid(), type:j === 'masuk' ? 'in' : 'out', amt:n, cat:str(a.kategori) || 'Lainnya', note:str(a.isi), date:d };
+      m.tx.push(x); await saveMg(); say((j === 'masuk' ? 'Masuk ' : 'Keluar ') + rp(n)); return 'ok, id=' + x.id;
+    }
+    if (ak === 'ubah'){
+      x = m.tx.find(function(t){ return String(t.id) === str(a.id); }); if (!x) return 'id tidak ditemukan';
+      if (a.jenis !== undefined){ var j2 = str(a.jenis); if (j2 !== 'masuk' && j2 !== 'keluar') return 'jenis: masuk atau keluar'; x.type = j2 === 'masuk' ? 'in' : 'out'; }
+      if (a.jumlah !== undefined){ var n2 = Math.abs(Number(a.jumlah)); if (!n2) return 'jumlah tidak valid'; x.amt = n2; }
+      if (a.kategori !== undefined) x.cat = str(a.kategori) || 'Lainnya';
+      if (a.isi !== undefined) x.note = str(a.isi);
+      if (a.tanggal !== undefined){ if (!isDate(str(a.tanggal))) return 'tanggal tidak valid'; x.date = str(a.tanggal); }
+      await saveMg(); say('Transaksi diubah'); return 'ok';
+    }
+    if (ak === 'hapus'){
+      var c = m.tx.length; m.tx = m.tx.filter(function(t){ return ids.indexOf(String(t.id)) < 0; }); c -= m.tx.length;
+      if (!c) return 'id tidak ditemukan'; await saveMg(); say(c + ' transaksi dihapus'); return 'ok, ' + c + ' dihapus';
+    }
+    return 'aksi tidak dikenal';
+  }
+  async function mJadwal(a, ak, ids){
+    var m = A.D.mg;
+    if (ak === 'tambah'){
+      var text = str(a.teks); if (!text) return 'teks kosong';
+      var hs = (Array.isArray(a.hari) ? a.hari : [a.hari]).map(str); if (!hs.length || !hs[0]) return 'isi hari';
+      var days = hs.some(function(h){ return h.toLowerCase() === 'semua'; }) ? [0,1,2,3,4,5,6]
+        : hs.map(function(h){ return DAYS.findIndex(function(d){ return d.toLowerCase() === h.toLowerCase(); }); });
+      if (days.some(function(d){ return d < 0; })) return 'nama hari: Senin sampai Minggu atau semua';
+      var until = str(a.sampai), time = str(a.jam);
+      if (until && !isDate(until)) return 'tanggal sampai tidak valid'; if (time && !isTime(time)) return 'jam tidak valid';
+      days.filter(function(d, i){ return days.indexOf(d) === i; }).forEach(function(d){
+        var it = { id:nid(), text:text }; if (until) it.until = until; if (time) it.time = time; m.sched[d].push(it);
+      });
+      await saveMg(); say('Jadwal: ' + text); return 'ok';
+    }
+    if (ak === 'ubah'){
+      var it = null, d0 = -1;
+      m.sched.forEach(function(arr, d){ var f = arr.find(function(x){ return String(x.id) === str(a.id); }); if (f){ it = f; d0 = d; } });
+      if (!it) return 'id tidak ditemukan'; if (it.taskId) return 'milik tugas; ubah lewat area tugas';
+      if (a.teks !== undefined){ if (!str(a.teks)) return 'teks kosong'; it.text = str(a.teks); }
+      if (a.sampai !== undefined){ var u = str(a.sampai); if (!u || u === 'permanen') delete it.until; else if (isDate(u)) it.until = u; else return 'tanggal sampai tidak valid'; }
+      if (a.jam !== undefined){ var t = str(a.jam); if (!t) delete it.time; else if (isTime(t)) it.time = t; else return 'jam tidak valid'; }
+      if (a.hari !== undefined){
+        var h = str(Array.isArray(a.hari) ? a.hari[0] : a.hari).toLowerCase(), d = DAYS.findIndex(function(x){ return x.toLowerCase() === h; });
+        if (d < 0) return 'nama hari tidak dikenal';
+        if (d !== d0){ m.sched[d0] = m.sched[d0].filter(function(x){ return x !== it; }); m.sched[d].push(it); }
+      }
+      await saveMg(); say('Jadwal diubah'); return 'ok';
+    }
+    if (ak === 'hapus'){
+      var c = 0, skip = 0;
+      m.sched.forEach(function(arr, d){ m.sched[d] = arr.filter(function(x){
+        if (ids.indexOf(String(x.id)) < 0) return true; if (x.taskId){ skip++; return true; } c++; return false; }); });
+      if (!c) return skip ? 'milik tugas; hapus lewat area tugas' : 'id tidak ditemukan';
+      await saveMg(); say(c + ' kegiatan dihapus'); return 'ok, ' + c + ' dihapus';
+    }
+    return 'aksi tidak dikenal';
+  }
+  async function mTugas(a, ak, ids){
+    var m = A.D.mg, t, e;
+    if (ak === 'tambah'){
+      if (!str(a.teks)) return 'judul kosong';
+      t = { id:nid(), title:'', note:'', deadline:'', time:'', doOn:'', doTime:'', prio:1, done:false };
+      e = taskFields(t, a); if (e) return e; m.tasks.push(t); syncTask(t); await saveMg(); say('Tugas: ' + t.title); return 'ok, id=' + t.id;
+    }
+    if (ak === 'ubah'){
+      t = m.tasks.find(function(x){ return String(x.id) === str(a.id); }); if (!t) return 'id tidak ditemukan';
+      var c = Object.assign({}, t); e = taskFields(c, a); if (e) return e;
+      Object.assign(t, c); syncTask(t); await saveMg(); say('Tugas diubah: ' + t.title); return 'ok';
+    }
+    if (ak === 'hapus'){
+      var n = m.tasks.length; m.tasks = m.tasks.filter(function(x){ return ids.indexOf(String(x.id)) < 0; });
+      m.sched.forEach(function(arr, d){ m.sched[d] = arr.filter(function(it){ return ids.indexOf(String(it.taskId)) < 0; }); });
+      n -= m.tasks.length; if (!n) return 'id tidak ditemukan'; await saveMg(); say(n + ' tugas dihapus'); return 'ok, ' + n + ' dihapus';
+    }
+    return 'aksi tidak dikenal';
+  }
+  function colorOf(v, def){ var k = COLN.indexOf(str(v).toLowerCase()); return k >= 0 ? COL[k] : def; }
+  async function mNote(a, ak, ids){
+    var D = A.D, x;
+    if (ak === 'tambah'){
+      if (!str(a.teks) && !str(a.isi)) return 'kosong';
+      x = { id:uid36(), title:str(a.teks), body:str(a.isi), color:colorOf(a.warna, COL[D.notes.length % 5]), ts:Date.now() };
+      D.notes.push(x); await put('notes', [x]); say('Note: ' + (x.title || 'Tanpa judul')); return 'ok, id=' + x.id;
+    }
+    if (ak === 'ubah'){
+      x = D.notes.find(function(n){ return String(n.id) === str(a.id); }); if (!x) return 'id tidak ditemukan';
+      if (a.warna !== undefined){ if (COLN.indexOf(str(a.warna).toLowerCase()) < 0) return 'warna: ' + COLN.join(', '); x.color = colorOf(a.warna); }
+      if (a.teks !== undefined || a.isi !== undefined){ if (a.teks !== undefined) x.title = str(a.teks); if (a.isi !== undefined) x.body = str(a.isi); x.ts = Date.now(); }
+      await put('notes', [x]); say('Note diubah'); return 'ok';
+    }
+    if (ak === 'hapus'){
+      var g = D.notes.filter(function(n){ return ids.indexOf(String(n.id)) >= 0; }).map(function(n){ return n.id; });
+      if (!g.length) return 'id tidak ditemukan'; D.notes = D.notes.filter(function(n){ return g.indexOf(n.id) < 0; });
+      await rm('notes', g); say(g.length + ' note dihapus'); return 'ok, ' + g.length + ' dihapus';
+    }
+    return 'aksi tidak dikenal';
+  }
+  async function mFolder(a, ak, ids){
+    var D = A.D, x;
+    if (ak === 'tambah'){
+      if (!str(a.teks)) return 'nama kosong';
+      x = { id:uid36(), name:str(a.teks), color:colorOf(a.warna, COL[D.folders.length % 5]) };
+      D.folders.push(x); await put('folders', [x]); say('Folder: ' + x.name); return 'ok, id=' + x.id;
+    }
+    if (ak === 'ubah'){
+      x = D.folders.find(function(f){ return String(f.id) === str(a.id); }); if (!x) return 'id tidak ditemukan';
+      if (a.teks !== undefined){ if (!str(a.teks)) return 'nama kosong'; x.name = str(a.teks); }
+      if (a.warna !== undefined){ if (COLN.indexOf(str(a.warna).toLowerCase()) < 0) return 'warna: ' + COLN.join(', '); x.color = colorOf(a.warna); }
+      await put('folders', [x]); say('Folder diubah'); return 'ok';
+    }
+    if (ak === 'hapus'){
+      var g = D.folders.filter(function(f){ return ids.indexOf(String(f.id)) >= 0; }).map(function(f){ return f.id; });
+      if (!g.length) return 'id tidak ditemukan';
+      var td = D.todos.filter(function(t){ return g.indexOf(t.fid) >= 0; }).map(function(t){ return t.id; });
+      D.todos = D.todos.filter(function(t){ return td.indexOf(t.id) < 0; }); D.folders = D.folders.filter(function(f){ return g.indexOf(f.id) < 0; });
+      await rm('todos', td); await rm('folders', g); say(g.length + ' folder dihapus'); return 'ok, ' + g.length + ' folder dan ' + td.length + ' to do dihapus';
+    }
+    return 'aksi tidak dikenal';
+  }
+  async function mTodo(a, ak, ids){
+    var D = A.D, x;
+    if (ak === 'tambah'){
+      if (!str(a.teks)) return 'teks kosong';
+      var f = D.folders.find(function(z){ return String(z.id) === str(a.folder_id); }), fn = str(a.folder_nama);
+      if (!f && fn){
+        f = D.folders.find(function(z){ return z.name.toLowerCase() === fn.toLowerCase(); });
+        if (!f){ f = { id:uid36(), name:fn, color:COL[D.folders.length % 5] }; D.folders.push(f); await put('folders', [f]); say('Folder: ' + fn); }
+      }
+      if (!f) return 'isi folder_id atau folder_nama';
+      x = { id:uid36(), fid:f.id, text:str(a.teks), done:false, ts:Date.now() };
+      D.todos.push(x); await put('todos', [x]); say('To do: ' + x.text); return 'ok, id=' + x.id;
+    }
+    if (ak === 'ubah'){
+      x = D.todos.find(function(t){ return String(t.id) === str(a.id); }); if (!x) return 'id tidak ditemukan';
+      if (a.teks !== undefined){ if (!str(a.teks)) return 'teks kosong'; x.text = str(a.teks); }
+      if (a.selesai !== undefined) x.done = !!a.selesai;
+      if (a.folder_id !== undefined){ if (!D.folders.some(function(z){ return String(z.id) === str(a.folder_id); })) return 'folder tidak ditemukan'; x.fid = str(a.folder_id); }
+      await put('todos', [x]); say('To do diubah'); return 'ok';
+    }
+    if (ak === 'hapus' || ak === 'bersihkan'){
+      var g = ak === 'hapus' ? D.todos.filter(function(t){ return ids.indexOf(String(t.id)) >= 0; })
+        : D.todos.filter(function(t){ return t.done && (!str(a.folder_id) || String(t.fid) === str(a.folder_id)); });
+      var gi = g.map(function(t){ return t.id; }); if (!gi.length) return ak === 'hapus' ? 'id tidak ditemukan' : 'tidak ada yang selesai';
+      D.todos = D.todos.filter(function(t){ return gi.indexOf(t.id) < 0; }); await rm('todos', gi); say(gi.length + ' to do dihapus'); return 'ok, ' + gi.length + ' dihapus';
+    }
+    return 'aksi tidak dikenal';
+  }
+  async function mWish(a, ak, ids){
+    var D = A.D, x;
+    function prio(v){ var n = Math.round(Number(v)); return n >= 1 && n <= 3 ? n : (['tinggi','sedang','rendah'].indexOf(str(v).toLowerCase()) + 1) || 0; }
+    if (ak === 'tambah'){
+      if (!str(a.teks)) return 'nama kosong';
+      x = { id:uid36(), name:str(a.teks), price:Math.abs(Number(a.jumlah)) || 0, prio:prio(a.prioritas) || 2, got:false };
+      D.wish.push(x); await put('wish', [x]); say('Wish: ' + x.name); return 'ok, id=' + x.id;
+    }
+    if (ak === 'ubah'){
+      x = D.wish.find(function(w){ return String(w.id) === str(a.id); }); if (!x) return 'id tidak ditemukan';
+      if (a.teks !== undefined){ if (!str(a.teks)) return 'nama kosong'; x.name = str(a.teks); }
+      if (a.jumlah !== undefined) x.price = Math.abs(Number(a.jumlah)) || 0;
+      if (a.prioritas !== undefined){ var p = prio(a.prioritas); if (!p) return 'prioritas: tinggi, sedang, rendah'; x.prio = p; }
+      if (a.selesai !== undefined) x.got = !!a.selesai;
+      await put('wish', [x]); say('Wish diubah'); return 'ok';
+    }
+    if (ak === 'hapus'){
+      var g = D.wish.filter(function(w){ return ids.indexOf(String(w.id)) >= 0; }).map(function(w){ return w.id; });
+      if (!g.length) return 'id tidak ditemukan'; D.wish = D.wish.filter(function(w){ return g.indexOf(w.id) < 0; });
+      await rm('wish', g); say(g.length + ' wish dihapus'); return 'ok, ' + g.length + ' dihapus';
+    }
+    return 'aksi tidak dikenal';
+  }
+  async function mutate(a){
+    var ar = str(a.area), ak = str(a.aksi), ids = idsOf(a);
+    var fn = { keuangan:mKeu, jadwal:mJadwal, tugas:mTugas, note:mNote, folder:mFolder, todo:mTodo, wish:mWish }[ar];
+    if (!fn) return 'area tidak dikenal';
+    var r = await fn(a, ak, ids);
+    if (/^ok/.test(r) && window.OFC) window.OFC.reload();
+    return r;
+  }
+
+  /* ---------- lompat ke web ---------- */
+  function web(a){
+    var t = str(a.tujuan).toLowerCase(), url = str(a.url);
+    if (t === 'unsent'){ add('t', '→ Unsent (PIN)'); close(); setTimeout(function(){ $('#unsentCard').click(); }, 250); return 'ok, kolom PIN dibuka; Unsent tetap terkunci'; }
+    if (SITES[t]) url = SITES[t];
+    else if (t === 'office'){ close(); return 'ok, sudah di Office'; }
+    else if (url){ if (!/^[a-z][a-z0-9+.-]*:/i.test(url)) url = 'https://' + url; }
+    if (!/^https?:\/\//i.test(url)) return 'url tidak valid (harus http/https)';
+    add('t', '→ ' + url.replace(/^https?:\/\//, '').slice(0, 50));
+    setTimeout(function(){ location.href = url; }, 1200);
+    return 'ok, membuka ' + url;
+  }
+
+  /* ---------- popup data ---------- */
+  function showPop(title, cols, rows, foot){
+    var h = '';
+    if (rows.length){
+      h = '<div class="aitw"><table>' + (cols.length ? '<thead><tr>' + cols.map(function(c){ return '<th>' + esc(c) + '</th>'; }).join('') + '</tr></thead>' : '') +
+        '<tbody>' + rows.map(function(r){ return '<tr>' + r.map(function(c){ return '<td>' + esc(c) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div>';
+    } else if (!foot) h = '<div class="aitw"><div class="none">Kosong</div></div>';
+    if (foot) h += '<p>' + esc(foot) + '</p>';
+    $('#aiPt').textContent = title || 'Data'; $('#aiPb').innerHTML = h; pop.classList.add('open');
+  }
+  function popup(a){
+    var D = A.D, m = D.mg, src = str(a.sumber).toLowerCase(), k = str(a.kata).toLowerCase(), st = str(a.status) || 'semua';
+    var cols = [], rows = [], foot = str(a.teks), title = str(a.judul);
+    function has(){ if (!k) return true; return Array.prototype.join.call(arguments, ' ').toLowerCase().indexOf(k) >= 0; }
+    function stOk(done){ return st === 'semua' || (st === 'selesai') === !!done; }
+    if (src === 'transaksi'){
+      var j = str(a.jenis), r = m.tx.filter(function(x){
+        return (!a.dari || x.date >= str(a.dari)) && (!a.sampai || x.date <= str(a.sampai)) && (!j || x.type === (j === 'masuk' ? 'in' : 'out')) && has(x.note, x.cat);
+      }).sort(function(p, q){ return String(q.date).localeCompare(String(p.date)); });
+      cols = ['Tanggal','Jenis','Jumlah','Kategori','Catatan'];
+      rows = r.slice(0, 300).map(function(x){ return [x.date, x.type === 'in' ? 'Masuk' : 'Keluar', rp(x.amt), x.cat || '', x.note || '']; });
+      foot = (foot ? foot + '\n' : '') + r.length + ' transaksi · Masuk ' + rp(sum(r, 'in')) + ' · Keluar ' + rp(sum(r, 'out'));
+      title = title || 'Transaksi';
+    } else if (src === 'jadwal'){
+      cols = ['Hari','Jam','Kegiatan','Sampai'];
+      m.sched.forEach(function(arr, d){ arr.slice().sort(function(p, q){ return (p.time || '99').localeCompare(q.time || '99'); })
+        .forEach(function(it){ if (has(it.text)) rows.push([DAYS[d], (it.time || '').replace(':', '.'), it.text, it.until || '']); }); });
+      title = title || 'Jadwal';
+    } else if (src === 'tugas'){
+      cols = ['Tugas','Deadline','Prioritas','Status'];
+      rows = m.tasks.filter(function(t){ return stOk(t.done) && has(t.title, t.note); })
+        .sort(function(p, q){ return ((p.deadline || '9999') + (p.time || '')).localeCompare((q.deadline || '9999') + (q.time || '')); })
+        .map(function(t){ return [t.title, (t.deadline || '-') + (t.time ? ' ' + t.time : ''), PRIO[t.prio] || '', t.done ? 'Selesai' : 'Aktif']; });
+      title = title || 'Tugas';
+    } else if (src === 'note'){
+      cols = ['Judul','Isi'];
+      rows = D.notes.filter(function(n){ return has(n.title, n.body); }).map(function(n){ var b = n.body || ''; return [n.title || 'Tanpa judul', b.length > 160 ? b.slice(0, 160) + '…' : b]; });
+      title = title || 'Notes';
+    } else if (src === 'todo'){
+      cols = ['Folder','To do','Status'];
+      var fn = {}; D.folders.forEach(function(f){ fn[f.id] = f.name; });
+      rows = D.todos.filter(function(t){ return stOk(t.done) && has(t.text, fn[t.fid]); }).map(function(t){ return [fn[t.fid] || '-', t.text, t.done ? 'Selesai' : 'Aktif']; });
+      title = title || 'To do';
+    } else if (src === 'wish'){
+      cols = ['Nama','Harga','Prioritas','Status'];
+      rows = D.wish.filter(function(w){ return stOk(w.got) && has(w.name); }).map(function(w){ return [w.name, rp(w.price), ['', 'Tinggi', 'Sedang', 'Rendah'][w.prio] || '', w.got ? 'Didapat' : 'Belum']; });
+      title = title || 'Wish list';
+    } else if (src === 'folder'){
+      cols = ['Folder','Aktif','Selesai'];
+      rows = D.folders.map(function(f){ var l = D.todos.filter(function(t){ return t.fid === f.id; }); return [f.name, l.filter(function(t){ return !t.done; }).length, l.filter(function(t){ return t.done; }).length]; });
+      title = title || 'Folder';
+    } else if (Array.isArray(a.kolom) && Array.isArray(a.baris)){
+      cols = a.kolom.map(str); rows = a.baris.map(function(r){ return String(r).split('|').map(function(c){ return c.trim(); }); });
+    } else if (!foot) return 'isi sumber, atau kolom dan baris, atau teks';
+    showPop(title, cols, rows, foot);
+    return 'ok, popup tampil (' + rows.length + ' baris)';
+  }
+
+  /* ---------- Gemini ---------- */
+  var S = function(d, e){ var o = { type:'STRING' }; if (d) o.description = d; if (e) o.enum = e; return o; };
+  var TOOLS = [{ functionDeclarations:[
+    { name:'ubah_data', description:'Tambah, ubah, hapus data. area keuangan: jenis, jumlah, kategori, isi(catatan), tanggal. jadwal(rutin mingguan): teks, hari[], jam, sampai. tugas: teks(judul), isi, deadline, jam(jam deadline), kerjakan_pada, jam_kerjakan, prioritas, selesai. note: teks(judul), isi, warna. folder: teks(nama), warna. todo: teks, folder_id atau folder_nama, selesai. wish: teks(nama), jumlah(harga), prioritas tinggi/sedang/rendah, selesai(didapat). Hapus banyak pakai ids.',
+      parameters:{ type:'OBJECT', properties:{
+        area:S('', ['keuangan','jadwal','tugas','note','folder','todo','wish']), aksi:S('bersihkan = hapus to do yang selesai', ['tambah','ubah','hapus','bersihkan']),
+        id:S(), ids:{ type:'ARRAY', items:S() }, teks:S(), isi:S(), warna:S('', COLN), jumlah:{ type:'NUMBER' }, jenis:S('', ['masuk','keluar']), kategori:S(),
+        tanggal:S('YYYY-MM-DD'), deadline:S('YYYY-MM-DD'), jam:S('HH:MM'), kerjakan_pada:S('YYYY-MM-DD'), jam_kerjakan:S('HH:MM'), prioritas:S(),
+        hari:{ type:'ARRAY', items:S('Senin..Minggu atau semua') }, sampai:S('YYYY-MM-DD, kosong/permanen = tanpa batas'), folder_id:S(), folder_nama:S(), selesai:{ type:'BOOLEAN' }
+      }, required:['area','aksi'] } },
+    { name:'buka_web', description:'Pindah ke halaman web. tujuan: manager, secretary, workspace, unsent (minta PIN), atau isi url untuk situs lain',
+      parameters:{ type:'OBJECT', properties:{ tujuan:S('', ['manager','secretary','workspace','unsent','lainnya']), url:S('hanya untuk tujuan lainnya') }, required:['tujuan'] } },
+    { name:'popup', description:'Tampilkan data dalam popup. Pakai sumber agar data diambil langsung dari database (akurat), dengan filter opsional. Untuk hasil olahan sendiri pakai kolom dan baris (tiap baris string, sel dipisah |), atau teks saja.',
+      parameters:{ type:'OBJECT', properties:{ judul:S(), sumber:S('', ['transaksi','jadwal','tugas','note','todo','wish','folder']), kata:S('filter teks'), status:S('', ['aktif','selesai','semua']),
+        jenis:S('khusus transaksi', ['masuk','keluar']), dari:S('YYYY-MM-DD'), sampai:S('YYYY-MM-DD'), kolom:{ type:'ARRAY', items:S() }, baris:{ type:'ARRAY', items:S() }, teks:S('catatan di bawah tabel') } } }
+  ] }];
+
+  function system(){
+    var D = A.D, m = D.mg, d = new Date(), ym = today().slice(0, 7), mo = m.tx.filter(function(x){ return String(x.date).slice(0, 7) === ym; });
+    var fn = {}; D.folders.forEach(function(f){ fn[f.id] = f.name; });
+    var data = JSON.stringify({
+      hari_ini:today() + ' ' + DAYS[(d.getDay() + 6) % 7],
+      keuangan:{ saldo:sum(m.tx, 'in') - sum(m.tx, 'out'), masuk_bulan_ini:sum(mo, 'in'), keluar_bulan_ini:sum(mo, 'out'), jumlah_transaksi:m.tx.length,
+        transaksi:m.tx.slice().sort(function(p, q){ return String(q.date).localeCompare(String(p.date)) || (Number(q.id) || 0) - (Number(p.id) || 0); }).slice(0, 120)
+          .map(function(x){ return { id:x.id, tgl:x.date, jenis:x.type === 'in' ? 'masuk' : 'keluar', jumlah:x.amt, kategori:x.cat || '', catatan:x.note || '' }; }) },
+      jadwal_rutin:DAYS.map(function(n, i){ return { hari:n, kegiatan:(m.sched[i] || []).filter(function(it){ return !it.taskId; }).map(function(it){ return { id:it.id, teks:it.text, jam:it.time || '', sampai:it.until || 'permanen' }; }) }; }),
+      tugas:m.tasks.slice(-100).map(function(t){ return { id:t.id, judul:t.title, catatan:t.note || '', deadline:t.deadline || '', jam:t.time || '', kerjakan_pada:t.doOn || '', jam_kerjakan:t.doTime || '', prioritas:PRIO[t.prio] || '', selesai:!!t.done }; }),
+      note:D.notes.slice(-40).map(function(n){ var b = n.body || ''; return { id:n.id, judul:n.title, isi:b.slice(0, 500), warna:COLN[COL.indexOf(n.color)] || '' }; }),
+      folder:D.folders.map(function(f){ return { id:f.id, nama:f.name }; }),
+      todo:D.todos.map(function(t){ return { id:t.id, folder:fn[t.fid] || '', folder_id:t.fid, teks:t.text, selesai:!!t.done }; }),
+      wish:D.wish.map(function(w){ return { id:w.id, nama:w.name, harga:w.price, prioritas:['', 'tinggi', 'sedang', 'rendah'][w.prio] || '', didapat:!!w.got }; })
+    });
+    return 'Kamu asisten di "Zaim\'s Office" dengan akses penuh ke data Manager (keuangan, jadwal rutin, tugas) dan Secretary (note, folder dan to do, wish). Jawab bahasa Indonesia, santai dan singkat. Perintah jelas langsung kerjakan lewat tool; pakai id dari data, jangan mengarang. Tanya balik hanya jika item ambigu. Sebelum menghapus banyak item sekaligus, atau semua data, konfirmasi dulu. Untuk "tampilkan/munculin/lihat data" pakai tool popup dengan sumber. Untuk "buka/lompat/ke web" pakai buka_web. Unsent terkunci PIN: hanya buka kolom PIN, jangan coba menebak PIN. File di galeri Manager tidak bisa diubah dari sini. DATA: ' + data;
+  }
+
+  async function call(obj){
+    var last = { s:404, m:'Model tidak ditemukan' };
+    for (var mi of (A.model ? [A.model] : MODELS)){
+      for (var th of [true, false]){
+        var body = JSON.stringify(th ? Object.assign({}, obj, { generationConfig:{ thinkingConfig:{ thinkingBudget:0 } } }) : obj);
+        var r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + mi + ':generateContent', { method:'POST', headers:{ 'content-type':'application/json', 'x-goog-api-key':key() }, body:body });
+        if (r.ok){ A.model = mi; return r.json(); }
+        var j = await r.json().catch(function(){ return null; });
+        last = { s:r.status, m:(j && j.error && j.error.message) || '' };
+        if (r.status === 400 && th && !/API key/i.test(last.m)) continue;
+        break;
+      }
+      if (last.s !== 404 && !(last.s === 400 && !/API key/i.test(last.m))) throw last;
+    }
+    throw last;
+  }
+  async function run(name, a){
+    try{
+      if (name === 'ubah_data') return await mutate(a);
+      if (name === 'buka_web') return web(a);
+      if (name === 'popup') return popup(a);
+      return 'tool tidak dikenal';
+    }catch(e){ return 'error: ' + String(e && (e.m || e.message) || e).slice(0, 140); }
+  }
+  async function send(text){
+    text = text.trim(); if (A.busy || !text) return;
+    A.busy = true; var sg = box.querySelector('.chips'); if (sg) sg.remove();
+    var base = A.msgs.length, acted = false;
+    add('u', text); A.dots = add('a', '…');
+    try{
+      await load();
+      A.msgs.push({ role:'user', parts:[{ text:text }] });
+      while (A.msgs.length > 24){ A.msgs.shift(); while (A.msgs.length && !(A.msgs[0].role === 'user' && A.msgs[0].parts[0] && A.msgs[0].parts[0].text !== undefined)) A.msgs.shift(); }
+      for (var i = 0; i < 12; i++){
+        var d = await call({ systemInstruction:{ parts:[{ text:system() }] }, tools:TOOLS, contents:A.msgs });
+        var c = d.candidates && d.candidates[0], ps = (c && c.content && c.content.parts) || [];
+        if (!ps.length) throw { s:200, m:'Balasan kosong' };
+        A.msgs.push({ role:'model', parts:ps });
+        var tx = ps.filter(function(x){ return x.text && !x.thought; }).map(function(x){ return x.text; }).join('\n').trim();
+        if (tx) add('a', tx);
+        var fc = ps.filter(function(x){ return x.functionCall; }); if (!fc.length) break;
+        acted = true; var out = [];
+        for (var f of fc) out.push({ functionResponse:{ name:f.functionCall.name, response:{ result:await run(f.functionCall.name, f.functionCall.args || {}) } } });
+        A.msgs.push({ role:'user', parts:out });
+      }
+    }catch(e){
+      if (!acted) A.msgs.length = base;
+      var m = String(e && e.m || '');
+      add('a', /API key/i.test(m) || (e && (e.s === 401 || e.s === 403)) ? 'Key tidak valid' : e && e.s === 429 ? 'Terlalu sering, tunggu'
+        : (e instanceof TypeError || /fetch|network/i.test(String(e && e.message))) ? 'Jaringan gagal' : e && e.s ? 'Gagal (' + e.s + ') ' + m.slice(0, 90) : (m || 'Error') );
+    }
+    A.dots.remove(); A.dots = null; A.busy = false;
+  }
+
+  /* ---------- event ---------- */
+  function go(){ var i = $('#aiI'), v = i.value; i.value = ''; send(v); }
+  function saveKey(){ var v = $('#aiKi').value.trim(); if (!v) return; mem = v; try{ localStorage.setItem(KEY, v); }catch(x){} $('#aiKi').value = ''; $('#aiKey').hidden = true; view(); suggest(); $('#aiI').focus(); }
+  $('#aiFab').addEventListener('click', open);
+  $('#aiX').addEventListener('click', close);
+  $('#aiPx').addEventListener('click', closePop);
+  sheet.addEventListener('click', function(e){
+    if (e.target === sheet) return close();
+    var b = e.target.closest('[data-s],[data-p]'); if (!b) return;
+    if (b.dataset.s) return send(b.dataset.s);
+    var i = $('#aiI'); i.value = b.dataset.p; i.focus();
+  });
+  pop.addEventListener('click', function(e){ if (e.target === pop) closePop(); });
+  $('#aiGear').addEventListener('click', function(){ $('#aiKey').hidden = !$('#aiKey').hidden; view(); if (!$('#aiKey').hidden) $('#aiKi').focus(); });
+  $('#aiSave').addEventListener('click', saveKey);
+  $('#aiGo').addEventListener('click', go);
+  $('#aiKi').addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.preventDefault(); saveKey(); } });
+  $('#aiI').addEventListener('keydown', function(e){ if (e.key === 'Enter' && !e.isComposing){ e.preventDefault(); go(); } });
+  $('#aiDel').addEventListener('click', function(){ mem = ''; try{ localStorage.removeItem(KEY); }catch(x){} $('#aiKi').value = ''; $('#aiKey').hidden = false; view(); });
+  document.addEventListener('keydown', function(e){
+    if (e.key !== 'Escape') return;
+    if (pop.classList.contains('open')) closePop(); else if (sheet.classList.contains('open')) close();
+  });
+})();
+</script>
+
 </body>
 </html>
