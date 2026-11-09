@@ -1119,7 +1119,7 @@ main:hover .col,main .col:hover{flex-grow:0}
 <script>
 /* Asisten Office: baca & ubah data Manager (manager_state) dan Secretary (secretary_*) lewat Gemini. */
 (function(){
-  var KEY = 'zn_gkey', MODELS = ['gemini-flash-lite-latest', 'gemini-flash-latest', 'gemini-2.5-flash'];
+  var KEY = 'zn_gkey', MODELS = ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-flash-lite-latest'];
   var SITES = { manager:'https://zaim0371.github.io/manager/', secretary:'https://zaim0371.github.io/secretary/', workspace:'https://zaim0371.github.io/note/' };
   var DAYS = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'], PRIO = ['rendah','sedang','tinggi'];
   var COLN = ['lime','ungu','kuning','pink','tosca'], COL = ['#DFF65A','#D9D0FF','#FFE8A3','#FFC9DD','#BFF0E8'];
@@ -1256,9 +1256,19 @@ main:hover .col,main .col:hover{flex-grow:0}
     var m = A.D.mg;
     if (ak === 'tambah'){
       var text = str(a.teks); if (!text) return 'teks kosong';
-      var hs = (Array.isArray(a.hari) ? a.hari : [a.hari]).map(str); if (!hs.length || !hs[0]) return 'isi hari';
+      var dt = str(a.tanggal), tm0 = str(a.jam);
+      if (dt){   // kegiatan sekali pada tanggal tertentu
+        if (!isDate(dt)) return 'tanggal tidak valid, pakai YYYY-MM-DD'; if (dt < today()) return 'tanggal sudah lewat; cek tabel kalender';
+        if (tm0 && !isTime(tm0)) return 'jam tidak valid';
+        var dd = (new Date(dt + 'T00:00').getDay() + 6) % 7;
+        var ex = m.sched[dd].find(function(x){ return !x.taskId && x.date === dt && String(x.text).toLowerCase() === text.toLowerCase() && (x.time || '') === tm0; });
+        if (ex) return 'sudah ada, id=' + ex.id;
+        var ni = { id:nid(), text:text, date:dt, until:dt }; if (tm0) ni.time = tm0; m.sched[dd].push(ni);
+        await saveMg(); say('Jadwal: ' + text + ' · ' + DAYS[dd] + ' ' + dt); return 'ok, ' + DAYS[dd] + ' ' + dt + ' (sekali)';
+      }
+      var hs = (Array.isArray(a.hari) ? a.hari : [a.hari]).map(str); if (!hs.length || !hs[0]) return 'isi tanggal (sekali) atau hari (tiap minggu)';
       var days = hs.some(function(h){ return h.toLowerCase() === 'semua'; }) ? [0,1,2,3,4,5,6]
-        : hs.map(function(h){ return DAYS.findIndex(function(d){ return d.toLowerCase() === h.toLowerCase(); }); });
+        : hs.map(function(h){ var k = h.toLowerCase().replace(/[^a-z]/g, '').replace('ahad', 'minggu'); return DAYS.findIndex(function(d){ return d.toLowerCase() === k; }); });
       if (days.some(function(d){ return d < 0; })) return 'nama hari: Senin sampai Minggu atau semua';
       var until = str(a.sampai), time = str(a.jam);
       if (until && !isDate(until)) return 'tanggal sampai tidak valid'; if (time && !isTime(time)) return 'jam tidak valid';
@@ -1274,7 +1284,16 @@ main:hover .col,main .col:hover{flex-grow:0}
       if (a.teks !== undefined){ if (!str(a.teks)) return 'teks kosong'; it.text = str(a.teks); }
       if (a.sampai !== undefined){ var u = str(a.sampai); if (!u || u === 'permanen') delete it.until; else if (isDate(u)) it.until = u; else return 'tanggal sampai tidak valid'; }
       if (a.jam !== undefined){ var t = str(a.jam); if (!t) delete it.time; else if (isTime(t)) it.time = t; else return 'jam tidak valid'; }
+      if (a.tanggal !== undefined){
+        var tg = str(a.tanggal);
+        if (!tg || tg === 'rutin'){ delete it.date; if (a.sampai === undefined) delete it.until; }
+        else if (isDate(tg)){
+          var nd = (new Date(tg + 'T00:00').getDay() + 6) % 7; it.date = tg; it.until = tg;
+          if (nd !== d0){ m.sched[d0] = m.sched[d0].filter(function(x){ return x !== it; }); m.sched[nd].push(it); d0 = nd; }
+        } else return 'tanggal tidak valid, pakai YYYY-MM-DD';
+      }
       if (a.hari !== undefined){
+        if (it.date) return 'kegiatan ini sekali; pindahkan lewat tanggal';
         var h = str(Array.isArray(a.hari) ? a.hari[0] : a.hari).toLowerCase(), d = DAYS.findIndex(function(x){ return x.toLowerCase() === h; });
         if (d < 0) return 'nama hari tidak dikenal';
         if (d !== d0){ m.sched[d0] = m.sched[d0].filter(function(x){ return x !== it; }); m.sched[d].push(it); }
@@ -1486,11 +1505,11 @@ main:hover .col,main .col:hover{flex-grow:0}
   /* ---------- Gemini ---------- */
   var S = function(d, e){ var o = { type:'STRING' }; if (d) o.description = d; if (e) o.enum = e; return o; };
   var TOOLS = [{ functionDeclarations:[
-    { name:'ubah_data', description:'Tambah, ubah, hapus data. area keuangan: jenis, jumlah, kategori, isi(catatan), tanggal. jadwal(rutin mingguan): teks, hari[], jam, sampai. tugas: teks(judul), isi, deadline, jam(jam deadline), kerjakan_pada, jam_kerjakan, prioritas, selesai. note: teks(judul), isi, warna. folder: teks(nama), warna. todo: teks, folder_id atau folder_nama, selesai. wish: teks(nama), jumlah(harga), prioritas tinggi/sedang/rendah, selesai(didapat). Hapus banyak pakai ids.',
+    { name:'ubah_data', description:'Tambah, ubah, hapus data. area keuangan: jenis, jumlah, kategori, isi(catatan), tanggal. jadwal (KEGIATAN: ujian, rapat, kuliah, janji, acara; bukan tugas): teks, jam, dan salah satu: tanggal (kegiatan SEKALI) atau hari[] + sampai (tiap minggu). tanggal="rutin" saat ubah = jadikan tiap minggu. tugas: teks(judul), isi, deadline, jam(jam deadline), kerjakan_pada, jam_kerjakan, prioritas, selesai. note: teks(judul), isi, warna. folder: teks(nama), warna. todo: teks, folder_id atau folder_nama, selesai. wish: teks(nama), jumlah(harga), prioritas tinggi/sedang/rendah, selesai(didapat). Hapus banyak pakai ids.',
       parameters:{ type:'OBJECT', properties:{
         area:S('', ['keuangan','jadwal','tugas','note','folder','todo','wish']), aksi:S('bersihkan = hapus to do yang selesai', ['tambah','ubah','hapus','bersihkan']),
         id:S(), ids:{ type:'ARRAY', items:S() }, teks:S(), isi:S(), warna:S('', COLN), jumlah:{ type:'NUMBER' }, jenis:S('', ['masuk','keluar']), kategori:S(),
-        tanggal:S('YYYY-MM-DD'), deadline:S('YYYY-MM-DD'), jam:S('HH:MM'), kerjakan_pada:S('YYYY-MM-DD'), jam_kerjakan:S('HH:MM'), prioritas:S(),
+        tanggal:S('YYYY-MM-DD. Keuangan: tanggal transaksi. Jadwal: tanggal kegiatan sekali'), deadline:S('YYYY-MM-DD'), jam:S('HH:MM'), kerjakan_pada:S('YYYY-MM-DD'), jam_kerjakan:S('HH:MM'), prioritas:S(),
         hari:{ type:'ARRAY', items:S('Senin..Minggu atau semua') }, sampai:S('YYYY-MM-DD, kosong/permanen = tanpa batas'), folder_id:S(), folder_nama:S(), selesai:{ type:'BOOLEAN' }
       }, required:['area','aksi'] } },
     { name:'buka_web', description:'Pindah ke halaman web. tujuan: manager, secretary, workspace, unsent (minta PIN), atau isi url untuk situs lain',
@@ -1500,29 +1519,40 @@ main:hover .col,main .col:hover{flex-grow:0}
         jenis:S('khusus transaksi', ['masuk','keluar']), dari:S('YYYY-MM-DD'), sampai:S('YYYY-MM-DD'), kolom:{ type:'ARRAY', items:S() }, baris:{ type:'ARRAY', items:S() }, teks:S('catatan di bawah tabel') } } }
   ] }];
 
+var RULES = `
+CARA MEMAHAMI PERMINTAAN
+1) Tentukan jenis data dulu. JADWAL (area jadwal): kata jadwal, kegiatan, acara, agenda, atau hal yang TERJADI pada hari/jam tertentu: ujian, kuliah, kelas, rapat, meeting, janji, les, latihan, olahraga, ibadah, sidang, wawancara, tes, ulang tahun, shift. TUGAS (area tugas): kata tugas, PR, to do, deadline, kumpulkan, kerjakan, selesaikan, atau pekerjaan yang bisa ditandai selesai. KEUANGAN: beli, bayar, jajan, gaji, transfer, nominal Rp/rb/k/jt.
+2) Kata "jadwal" TIDAK PERNAH menjadi tugas. "Tambahin jadwal hari Rabu kegiatan ujian" = area jadwal, teks "Ujian", tanggal Rabu terdekat. BUKAN area tugas.
+3) Jadwal SEKALI (isi tanggal): ujian, tes, sidang, wawancara, janji, rapat tertentu, acara, ulang tahun, atau ada tanggal/besok/lusa/"Rabu ini"/"minggu depan". Jadwal TIAP MINGGU (isi hari): ada kata setiap/tiap/rutin/mingguan, atau kegiatan berulang (kuliah, kelas, les, latihan, olahraga, ibadah) tanpa tanggal. Kalau ragu pilih yang paling wajar, sebut di laporan, jangan tanya dulu.
+4) Tanggal: pakai tabel "kalender" di data, jangan hitung sendiri. Nama hari tanpa keterangan = hari itu terdekat ke depan (hari ini termasuk). "Rabu depan" = minggu berikutnya. Jam: "jam 7"/"7 pagi" = 07:00, "2 siang" = 14:00, "7 malam" = 19:00, "setengah 8" = 07:30. Jangan mengarang jam.
+5) Satu pesan bisa berisi beberapa perintah: kerjakan semuanya. Cek data dulu agar tidak duplikat.
+6) Koreksi user ("bukan tugas, jadwal", "salah", "harusnya Kamis"): perbaiki data yang baru kamu buat (hapus yang salah, buat yang benar atau ubah) tanpa tanya.
+7) Nominal: 25rb/25k = 25000, 1,5jt = 1500000. Tanpa mata uang = Rupiah.
+8) Setelah selesai, laporkan 1-2 kalimat: apa yang berubah, lengkap dengan hari dan tanggal.`;
   function system(){
     var D = A.D, m = D.mg, d = new Date(), ym = today().slice(0, 7), mo = m.tx.filter(function(x){ return String(x.date).slice(0, 7) === ym; });
     var fn = {}; D.folders.forEach(function(f){ fn[f.id] = f.name; });
     var data = JSON.stringify({
       hari_ini:today() + ' ' + DAYS[(d.getDay() + 6) % 7],
+      kalender:Array.from({ length:21 }, function(_, i){ var x = new Date(); x.setDate(x.getDate() + i); return DAYS[(x.getDay() + 6) % 7] + ' ' + iso(x) + (i === 0 ? ' (hari ini)' : i === 1 ? ' (besok)' : i === 2 ? ' (lusa)' : ''); }),
       keuangan:{ saldo:sum(m.tx, 'in') - sum(m.tx, 'out'), masuk_bulan_ini:sum(mo, 'in'), keluar_bulan_ini:sum(mo, 'out'), jumlah_transaksi:m.tx.length,
         transaksi:m.tx.slice().sort(function(p, q){ return String(q.date).localeCompare(String(p.date)) || (Number(q.id) || 0) - (Number(p.id) || 0); }).slice(0, 120)
           .map(function(x){ return { id:x.id, tgl:x.date, jenis:x.type === 'in' ? 'masuk' : 'keluar', jumlah:x.amt, kategori:x.cat || '', catatan:x.note || '' }; }) },
-      jadwal_rutin:DAYS.map(function(n, i){ return { hari:n, kegiatan:(m.sched[i] || []).filter(function(it){ return !it.taskId; }).map(function(it){ return { id:it.id, teks:it.text, jam:it.time || '', sampai:it.until || 'permanen' }; }) }; }),
+      jadwal:DAYS.map(function(n, i){ return { hari:n, kegiatan:(m.sched[i] || []).filter(function(it){ return !it.taskId; }).map(function(it){ return { id:it.id, teks:it.text, jam:it.time || '', tipe:it.date ? 'sekali' : 'tiap minggu', tanggal:it.date || '', sampai:it.until || 'permanen' }; }) }; }),
       tugas:m.tasks.slice(-100).map(function(t){ return { id:t.id, judul:t.title, catatan:t.note || '', deadline:t.deadline || '', jam:t.time || '', kerjakan_pada:t.doOn || '', jam_kerjakan:t.doTime || '', prioritas:PRIO[t.prio] || '', selesai:!!t.done }; }),
       note:D.notes.slice(-40).map(function(n){ var b = n.body || ''; return { id:n.id, judul:n.title, isi:b.slice(0, 500), warna:COLN[COL.indexOf(n.color)] || '' }; }),
       folder:D.folders.map(function(f){ return { id:f.id, nama:f.name }; }),
       todo:D.todos.map(function(t){ return { id:t.id, folder:fn[t.fid] || '', folder_id:t.fid, teks:t.text, selesai:!!t.done }; }),
       wish:D.wish.map(function(w){ return { id:w.id, nama:w.name, harga:w.price, prioritas:['', 'tinggi', 'sedang', 'rendah'][w.prio] || '', didapat:!!w.got }; })
     });
-    return 'Kamu asisten di "Zaim\'s Office" dengan akses penuh ke data Manager (keuangan, jadwal rutin, tugas) dan Secretary (note, folder dan to do, wish). Jawab bahasa Indonesia, santai dan singkat. Perintah jelas langsung kerjakan lewat tool; pakai id dari data, jangan mengarang. Tanya balik hanya jika item ambigu. Sebelum menghapus banyak item sekaligus, atau semua data, konfirmasi dulu. Untuk "tampilkan/munculin/lihat data" pakai tool popup dengan sumber. Untuk "buka/lompat/ke web" pakai buka_web. Unsent terkunci PIN: hanya buka kolom PIN, jangan coba menebak PIN. File di galeri Manager tidak bisa diubah dari sini. DATA: ' + data;
+    return 'Kamu asisten di "Zaim\'s Office" dengan akses penuh ke data Manager (keuangan, jadwal rutin, tugas) dan Secretary (note, folder dan to do, wish). Jawab bahasa Indonesia, santai dan singkat. Perintah jelas langsung kerjakan lewat tool; pakai id dari data, jangan mengarang. Tanya balik hanya jika item ambigu. Sebelum menghapus banyak item sekaligus, atau semua data, konfirmasi dulu. Untuk "tampilkan/munculin/lihat data" pakai tool popup dengan sumber. Untuk "buka/lompat/ke web" pakai buka_web. Unsent terkunci PIN: hanya buka kolom PIN, jangan coba menebak PIN. File di galeri Manager tidak bisa diubah dari sini.' + RULES + '\nDATA: ' + data;
   }
 
   async function call(obj){
     var last = { s:404, m:'Model tidak ditemukan' };
     for (var mi of (A.model ? [A.model] : MODELS)){
       for (var th of [true, false]){
-        var body = JSON.stringify(th ? Object.assign({}, obj, { generationConfig:{ thinkingConfig:{ thinkingBudget:0 } } }) : obj);
+        var body = JSON.stringify(Object.assign({}, obj, { generationConfig:th ? { temperature:.2, thinkingConfig:{ thinkingBudget:1024 } } : { temperature:.2 } }));
         var r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + mi + ':generateContent', { method:'POST', headers:{ 'content-type':'application/json', 'x-goog-api-key':key() }, body:body });
         if (r.ok){ A.model = mi; return r.json(); }
         var j = await r.json().catch(function(){ return null; });
@@ -1530,7 +1560,7 @@ main:hover .col,main .col:hover{flex-grow:0}
         if (r.status === 400 && th && !/API key/i.test(last.m)) continue;
         break;
       }
-      if (last.s !== 404 && !(last.s === 400 && !/API key/i.test(last.m))) throw last;
+      if ([404, 429, 500, 503].indexOf(last.s) < 0 && !(last.s === 400 && !/API key/i.test(last.m))) throw last;
     }
     throw last;
   }
