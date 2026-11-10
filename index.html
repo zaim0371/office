@@ -582,6 +582,56 @@ main:hover .col,main .col:hover{flex-grow:0}
 .aipop p{font-weight:700;font-size:14px;margin-top:10px;white-space:pre-wrap}
 .aipop .none{padding:14px;font-weight:700}
 @media (max-width:760px){.aifab{right:14px;bottom:66px;width:54px;height:54px}}
+
+/* ===== RANGKUMAN AI ===== */
+.xh{display:flex;align-items:center;gap:8px;padding:0 12px 10px}
+.xh span{font:400 12px 'Archivo Black',Impact,sans-serif;background:var(--ink);color:var(--paper);padding:5px 9px;transform:rotate(-2deg)}
+.xh small{flex:1;font-weight:700;font-size:11px;text-align:right}
+.xref{font:400 17px 'Archivo Black',sans-serif;width:32px;height:32px;background:var(--yellow);border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);cursor:pointer;color:var(--ink)}
+.xref:active{transform:translate(3px,3px);box-shadow:none}
+.xb{padding:2px 14px 6px;display:flex;flex-direction:column;gap:12px}
+.xt{font:400 clamp(24px,7vw,30px)/1 'Archivo Black',Impact,sans-serif;text-transform:uppercase;letter-spacing:-1px}
+.xp{font-weight:700;font-size:14px;line-height:1.45}
+.xl{list-style:none;display:flex;flex-direction:column;gap:7px}
+.xl li{display:flex;gap:8px;align-items:flex-start;border:3px solid var(--ink);padding:7px 9px;background:var(--c);box-shadow:3px 3px 0 var(--ink);font-size:13px;font-weight:700}
+.xl li b{font-size:10px;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:2px 6px;flex:none}
+.xl .k-uang{--c:var(--green)}.xl .k-jadwal{--c:var(--blue)}.xl .k-tugas{--c:var(--yellow)}.xl .k-todo{--c:var(--pink)}
+.xch{border:4px solid var(--ink);padding:10px 12px 12px;box-shadow:5px 5px 0 var(--ink);background:#fffdf4}
+.xch>b{display:block;font:400 13px 'Archivo Black',Impact,sans-serif;text-transform:uppercase;margin-bottom:8px}
+.xch>p{font-size:12px;font-weight:700;line-height:1.35;margin-top:10px;padding-top:8px;border-top:3px dashed var(--ink)}
+.xlg{display:flex;gap:12px;font-size:11px;font-weight:700;margin-bottom:6px}
+.xlg .g{color:#1f9a45}.xlg .r{color:var(--red)}
+.xbr{display:flex;gap:6px;align-items:flex-end}
+.xbr>div{flex:1;min-width:0;text-align:center}
+.xcc{height:90px;display:flex;gap:2px;align-items:flex-end;border-bottom:3px solid var(--ink)}
+.xcc i{flex:1;border:2px solid var(--ink);border-bottom:0;transform-origin:bottom}
+.xcc i.g{background:#2fbf5b}.xcc i.r{background:var(--red)}
+.xbr u{display:block;font-size:10px;font-weight:700;text-decoration:none;margin-top:3px}
+.xmx{font-size:10px;font-weight:700;text-align:right;margin-top:4px}
+.xsv{width:100%;display:block;overflow:visible}
+.xsv polyline{fill:none;stroke-width:4;stroke-linejoin:round}
+.xsv text{font:700 10px 'Space Grotesk',sans-serif;fill:var(--ink);text-anchor:middle}
+.xdn{display:flex;gap:14px;align-items:center}
+.xdn svg{width:112px;flex:none;transform:none}
+.xdn circle{fill:none;stroke-width:7}
+.xdn ul{list-style:none;flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.xdn li{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700}
+.xdn li i{width:10px;height:10px;border:2px solid var(--ink);flex:none}
+.xdn li span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.xhb{display:flex;flex-direction:column;gap:8px}
+.xhb>div>div{display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:3px}
+.xhb s{display:block;height:12px;border:3px solid var(--ink);background:#fff}
+.xhb s i{display:block;height:100%;background:var(--pink)}
+.xm{border:4px dashed var(--ink);padding:14px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;font-size:13px;font-weight:700}
+.xm b{font:400 16px 'Archivo Black',Impact,sans-serif;text-transform:uppercase}
+.xbtn{font:700 13px 'Space Grotesk',sans-serif;background:var(--yellow);color:var(--ink);border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);padding:7px 12px;cursor:pointer}
+.xbtn:active{transform:translate(3px,3px);box-shadow:none}
+.xsk{display:flex;flex-direction:column;gap:7px;width:100%}
+.xsk i{display:block;height:12px;background:var(--ink);opacity:.15}
+.xsk i:nth-child(2){width:80%}.xsk i:nth-child(3){width:55%}
+@keyframes xg{from{transform:scaleY(0)}}
+@keyframes xw{50%{opacity:.4}}
+@media (prefers-reduced-motion:no-preference){.xcc i{animation:xg .6s var(--d,0ms) both}.xsk i{animation:xw 1s infinite}}
 </style>
 </head>
 <body>
@@ -592,20 +642,9 @@ main:hover .col,main .col:hover{flex-grow:0}
 </header>
 
 <div class="wrap">
-  <section class="panel" id="dash" aria-label="Ringkasan">
-    <div class="tabs" id="tabs" role="tablist">
-      <button class="tab on" type="button" role="tab" data-i="0">uang</button>
-      <button class="tab" type="button" role="tab" data-i="1">todo</button>
-      <button class="tab" type="button" role="tab" data-i="2">jadwal</button>
-      <button class="tab" type="button" role="tab" data-i="3">tugas</button>
-    </div>
-    <div class="vp" id="vp"><div class="pgs" id="pgs"></div></div>
-    <div class="dots" id="dots">
-      <button class="on" type="button" data-i="0" aria-label="Uang"></button>
-      <button type="button" data-i="1" aria-label="Todo"></button>
-      <button type="button" data-i="2" aria-label="Jadwal"></button>
-      <button type="button" data-i="3" aria-label="Tugas"></button>
-    </div>
+  <section class="panel" id="dash" aria-label="Rangkuman AI">
+    <div class="xh"><span>RANGKUMAN AI</span><small id="xStamp"></small><button class="xref" id="xRef" type="button" aria-label="Segarkan">&#8635;</button></div>
+    <div class="xb" id="xb"></div>
   </section>
 </div>
 
@@ -761,8 +800,7 @@ main:hover .col,main .col:hover{flex-grow:0}
   var SB_URL = 'https://ypdtaoccfxzquyfsiloy.supabase.co';
   var SB_KEY = 'sb_publishable_2crOjnp8Rf4zhCt2bdO_Ug_rH4enKGH';
   var URL_MG = 'https://zaim0371.github.io/manager/', URL_SEC = 'https://zaim0371.github.io/secretary/';
-  var pgs = document.getElementById('pgs'), vp = document.getElementById('vp'), authBtn = document.getElementById('authBtn');
-  var tabs = [].slice.call(document.querySelectorAll('#tabs .tab')), dots = [].slice.call(document.querySelectorAll('#dots button'));
+  var authBtn = document.getElementById('authBtn');
   var lgOv = document.getElementById('loginOv'), lgMsg = document.getElementById('lm');
   var sb = window.supabase ? window.supabase.createClient(SB_URL, SB_KEY) : null;
   var uid = null, mg = null, todos = [], doneN = 0, folders = [], loaded = false, errMg = '', errTd = '';
@@ -812,220 +850,120 @@ main:hover .col,main .col:hover{flex-grow:0}
     return /permission denied/i.test(m) ? 'Izin tabel ditolak. Jalankan GRANT SELECT di Supabase.' : 'Gagal: ' + esc(m);
   }
 
-  /* ---------- komponen kartu ---------- */
-  function card(cls, href, label, badge, body){
-    return '<a class="c ' + cls + '" href="' + href + '" draggable="false">' +
-      (label ? '<div class="c-h"><span>' + esc(label) + '</span>' + (badge ? '<small>' + esc(badge) + '</small>' : '') + '</div>' : '') + body + '</a>';
+  /* ---------- rangkuman AI ---------- */
+  var ai = { res: null, st: 'idle', err: '', t: 0 }, gtok = 0, gtm = 0, CK = 'zn_ai_sum_', last = '';
+  var body = document.getElementById('xb'), stamp = document.getElementById('xStamp');
+  var SYS = ['Kamu penulis rangkuman di "Zaim\'s Office". Bahasa Indonesia, santai, singkat. Pakai HANYA data yang diberikan, jangan mengarang angka.',
+    'Balas HANYA JSON valid: {"judul":"maks 5 kata","teks":["paragraf 1","paragraf 2 (opsional)"],"sorotan":[{"jenis":"uang|jadwal|tugas|todo","teks":"maks 10 kata"}],"grafik":[{"data":"hari7|bulan6|kategori","tipe":"bar|garis|donat|bar_h","judul":"judul singkat","catatan":"1 kalimat temuan, sertakan angka dari data"}]}.',
+    'teks: total maks 70 kata; rangkum kondisi hari ini (jadwal, tugas telat/dekat deadline, to do, keuangan). sorotan: 2-4 hal terpenting. grafik: pilih 1-3 yang paling informatif.',
+    'Pada statistik, a = masuk, b = keluar, v = pengeluaran per kategori. hari7/bulan6 cocok untuk bar atau garis; kategori cocok untuk donat atau bar_h. Tulis rupiah singkat (25rb, 1,5jt).'].join('\n');
+
+  function hp(v, mx){ return v ? Math.max(6, Math.round(v / mx * 100)) : 0; }
+  function hash(t){ var h = 5381; for (var i = 0; i < t.length; i++) h = ((h << 5) + h + t.charCodeAt(i)) | 0; return String(h); }
+  function hasData(x){ return x.rows.some(function(r){ return r.v > 0 || r.a > 0 || r.b > 0; }); }
+  function sets(){
+    var tx = mg && Array.isArray(mg.tx) ? mg.tx : [], now = new Date(), ym = iso(now).slice(0, 7), h7 = [], b6 = [], cats = {}, i, d, k, m, mk;
+    function pick(f){ var r = tx.filter(f); return { a: sum(r, 'in'), b: sum(r, 'out') }; }
+    for (i = 6; i >= 0; i--){ d = new Date(now); d.setDate(d.getDate() - i); k = iso(d); var x = pick(function(t){ return t.date === k; }); h7.push({ l: HARI[(d.getDay() + 6) % 7].slice(0, 3), a: x.a, b: x.b }); }
+    for (i = 5; i >= 0; i--){ m = new Date(now.getFullYear(), now.getMonth() - i, 1); mk = iso(m).slice(0, 7); var y = pick(function(t){ return String(t.date).slice(0, 7) === mk; }); b6.push({ l: BULAN[m.getMonth()], a: y.a, b: y.b }); }
+    tx.forEach(function(t){ if (t.type === 'out' && String(t.date).slice(0, 7) === ym){ var c = t.cat || 'Lainnya'; cats[c] = (cats[c] || 0) + (Number(t.amt) || 0); } });
+    var kt = Object.keys(cats).sort(function(p, q){ return cats[q] - cats[p]; }).slice(0, 6).map(function(c){ return { l: c, v: cats[c] }; });
+    return { hari7: { name: 'Masuk vs keluar 7 hari', rows: h7 }, bulan6: { name: 'Masuk vs keluar 6 bulan', rows: b6 }, kategori: { name: 'Pengeluaran per kategori', rows: kt } };
   }
-  function page(n, a, b, c, d){ return '<div class="gl gl' + n + '">' + a + b + c + d + '</div>'; }
-  function li(tag, text){ return '<li>' + (tag ? '<b>' + esc(tag) + '</b>' : '') + '<span>' + esc(text) + '</span></li>'; }
-  function list(items, max, empty, isErr){
-    if (!items.length) return '<ul><li class="none' + (isErr ? ' err' : '') + '"><span>' + empty + '</span></li></ul>';
-    var h = items.slice(0, max).join('');
-    if (items.length > max) h += '<li class="more"><span>+' + (items.length - max) + ' lagi</span></li>';
-    return '<ul>' + h + '</ul>';
+  function payload(){
+    var now = new Date(), f = money(), S = sets(), ag = function(it){ return { jam: it.time || '', kegiatan: it.text }; };
+    return { hari_ini: iso(now) + ' ' + HARI[(now.getDay() + 6) % 7], saldo: f.bal, masuk_bln_ini: f.inc, keluar_bln_ini: f.out,
+      statistik: { hari7: S.hari7.rows, bulan6: S.bulan6.rows, kategori: S.kategori.rows },
+      jadwal_hari_ini: agenda(0).map(ag), jadwal_besok: agenda(1).map(ag),
+      tugas_aktif: tasks().slice(0, 15).map(function(t){ return { judul: t.title, deadline: t.deadline || '', jam: t.time || '', prioritas: ['rendah', 'sedang', 'tinggi'][t.prio] || '', hari_lagi: t.deadline ? dayDiff(t.deadline) : null }; }),
+      todo_aktif: todos.slice(0, 15).map(function(t){ return t.text; }), todo_selesai: doneN };
   }
-  function num(v, cls){ return '<div class="n' + (cls ? ' ' + cls : '') + '">' + esc(v) + '</div>'; }
-  function bar(p, d, bg){ return '<s class="mt"><i style="width:' + p + '%;--d:' + d + 'ms' + (bg ? ';background:' + bg : '') + '"></i></s>'; }
-  function urg(t){
-    if (!t.deadline) return null;
-    var n = dayDiff(t.deadline);
-    return { p: n < 0 ? 100 : Math.max(8, Math.round(100 - n * 12)), c: n <= 1 ? 'var(--red)' : n <= 3 ? 'var(--yellow)' : 'var(--green)' };
-  }
-  function trow(t, j){
-    var u = urg(t), d = due(t);
-    return '<li class="tk"><div class="tr"><span>' + esc(t.title) + '</span>' + (d ? '<b>' + esc(d) + '</b>' : '') + '</div>' + (u ? bar(u.p, j * 60, u.c) : '') + '</li>';
+  function clean(r){
+    if (!r || typeof r !== 'object') throw { m: 'Format AI tidak valid' };
+    var S = sets(), K = ['uang', 'jadwal', 'tugas', 'todo'];
+    var teks = (Array.isArray(r.teks) ? r.teks : String(r.teks || '').split(/\n+/)).map(function(x){ return String(x).trim(); }).filter(Boolean).slice(0, 2);
+    if (!teks.length) throw { m: 'Balasan AI kosong' };
+    var sor = (Array.isArray(r.sorotan) ? r.sorotan : []).filter(function(o){ return o && K.indexOf(o.jenis) > -1 && o.teks; }).slice(0, 4).map(function(o){ return { jenis: o.jenis, teks: String(o.teks).slice(0, 90) }; });
+    var gr = (Array.isArray(r.grafik) ? r.grafik : []).filter(function(g, i, a){ return g && S[g.data] && hasData(S[g.data]) && a.findIndex(function(z){ return z && z.data === g.data; }) === i; }).slice(0, 3)
+      .map(function(g){ var kat = g.data === 'kategori'; return { data: g.data, t: kat ? (g.tipe === 'bar_h' ? 'bar_h' : 'donat') : (g.tipe === 'garis' ? 'garis' : 'bar'), judul: String(g.judul || S[g.data].name).slice(0, 50), catatan: String(g.catatan || '').slice(0, 140) }; });
+    if (!gr.length){ var f = ['hari7', 'bulan6', 'kategori'].filter(function(k){ return hasData(S[k]); })[0]; if (f) gr = [{ data: f, t: f === 'kategori' ? 'donat' : 'bar', judul: S[f].name, catatan: '' }]; }
+    return { judul: String(r.judul || 'Rangkuman').slice(0, 50), teks: teks, sorotan: sor, grafik: gr };
   }
 
+  /* ---------- chart ---------- */
+  function legend(){ return '<div class="xlg"><span class="g">▮ masuk</span><span class="r">▮ keluar</span></div>'; }
+  function mxOf(R){ return Math.max.apply(null, R.map(function(r){ return Math.max(r.a, r.b); }).concat(1)); }
+  function bars(R){
+    var mx = mxOf(R);
+    return legend() + '<div class="xbr">' + R.map(function(r, j){ return '<div><div class="xcc"><i class="g" title="' + rp(r.a) + '" style="height:' + hp(r.a, mx) + '%;--d:' + j * 50 + 'ms"></i><i class="r" title="' + rp(r.b) + '" style="height:' + hp(r.b, mx) + '%;--d:' + j * 50 + 'ms"></i></div><u>' + esc(r.l) + '</u></div>'; }).join('') + '</div><div class="xmx">maks ' + short(mx) + '</div>';
+  }
+  function line(R){
+    var W = 300, H = 100, mx = mxOf(R), n = R.length;
+    function X(i){ return n > 1 ? 10 + i * (W - 20) / (n - 1) : W / 2; }
+    function pts(k){ return R.map(function(r, i){ return X(i).toFixed(1) + ',' + (H - 6 - r[k] / mx * (H - 16)).toFixed(1); }).join(' '); }
+    return legend() + '<svg class="xsv" viewBox="0 0 ' + W + ' ' + (H + 14) + '"><polyline points="' + pts('a') + '" style="stroke:#2fbf5b"/><polyline points="' + pts('b') + '" style="stroke:var(--red)"/>' +
+      R.map(function(r, i){ return '<text x="' + X(i).toFixed(1) + '" y="' + (H + 12) + '">' + esc(r.l) + '</text>'; }).join('') + '</svg><div class="xmx">maks ' + short(mx) + '</div>';
+  }
+  function donut(R){
+    var tot = R.reduce(function(a, r){ return a + r.v; }, 0) || 1, off = 0, C = ['var(--pink)', 'var(--blue)', 'var(--yellow)', 'var(--green)', 'var(--red)', '#b9a7ff'];
+    var arcs = R.map(function(r, i){ var p = r.v / tot * 100, e = '<circle r="15.9155" cx="21" cy="21" style="stroke:' + C[i % 6] + '" stroke-dasharray="' + p.toFixed(2) + ' ' + (100 - p).toFixed(2) + '" stroke-dashoffset="' + (25 - off).toFixed(2) + '"/>'; off += p; return e; }).join('');
+    return '<div class="xdn"><svg viewBox="0 0 42 42">' + arcs + '</svg><ul>' + R.map(function(r, i){ return '<li><i style="background:' + C[i % 6] + '"></i><span>' + esc(r.l) + '</span><b>' + short(r.v) + '</b></li>'; }).join('') + '</ul></div>';
+  }
+  function hbar(R){
+    var mx = R[0] ? R[0].v : 1;
+    return '<div class="xhb">' + R.map(function(r){ return '<div><div><span>' + esc(r.l) + '</span><b>' + short(r.v) + '</b></div><s><i style="width:' + Math.max(6, Math.round(r.v / mx * 100)) + '%"></i></s></div>'; }).join('') + '</div>';
+  }
+  function chart(g, S){
+    var R = S[g.data].rows, h = g.t === 'donat' ? donut(R) : g.t === 'bar_h' ? hbar(R) : g.t === 'garis' ? line(R) : bars(R);
+    return '<div class="xch"><b>' + esc(g.judul) + '</b>' + h + (g.catatan ? '<p>' + esc(g.catatan) + '</p>' : '') + '</div>';
+  }
+
+  /* ---------- tampilan ---------- */
   function draw(){
-    var now = new Date(), hasMg = !!(uid && mg), f = money();
-    var wait = !uid ? 'Masuk dulu untuk melihat data' : (loaded ? 'Kosong' : 'Memuat…');
-    var emp = hasMg ? 'Kosong' : (uid && errMg ? 'Gagal: ' + esc(errMg) : wait);
-    var d0 = HARI[(now.getDay() + 6) % 7], d1 = HARI[(now.getDay() + 7) % 7];
+    var h = '', r = ai.res;
+    if (!uid){ body.innerHTML = ''; last = ''; stamp.textContent = ''; return; }
+    if (r){
+      var S = sets();
+      h = '<h2 class="xt">' + esc(r.judul) + '</h2>' + r.teks.map(function(p){ return '<p class="xp">' + esc(p) + '</p>'; }).join('') +
+        (r.sorotan.length ? '<ul class="xl">' + r.sorotan.map(function(o){ return '<li class="k-' + o.jenis + '"><b>' + o.jenis + '</b><span>' + esc(o.teks) + '</span></li>'; }).join('') + '</ul>' : '') +
+        r.grafik.map(function(g){ return chart(g, S); }).join('');
+    } else if (ai.st === 'nokey') h = '<div class="xm"><b>Belum ada API key</b><span>Buka asisten, isi key di ⚙, rangkuman muncul otomatis.</span><button class="xbtn" type="button" id="xOpen">Buka asisten</button></div>';
+    else if (ai.st === 'err') h = '<div class="xm"><b>Gagal merangkum</b><span>' + esc(ai.err) + '</span><button class="xbtn" type="button" id="xRetry">Coba lagi</button></div>';
+    else h = '<div class="xm"><b>AI lagi merangkum…</b><div class="xsk"><i></i><i></i><i></i></div></div>';
+    if (h !== last){ body.innerHTML = h; last = h; }
+    stamp.textContent = ai.st === 'load' ? 'memperbarui…' : ai.st === 'err' && r ? 'gagal memperbarui' : ai.t ? 'diperbarui ' + pad(new Date(ai.t).getHours()) + '.' + pad(new Date(ai.t).getMinutes()) : '';
+  }
+  body.addEventListener('click', function(e){
+    if (e.target.closest('#xOpen')){ var f = document.getElementById('aiFab'); if (f) f.click(); }
+    else if (e.target.closest('#xRetry')) summ(true);
+  });
+  document.getElementById('xRef').addEventListener('click', function(){ summ(true); });
 
-    /* kartu = kotak persegi; sisi kotak mengikuti banyaknya data */
-    function sz(n){ return n < 1 ? 'S' : n <= 2 ? 'M' : 'L'; }
-    function szB(n){ return n < 1 ? 'S' : n <= 2 ? 'M' : 'L'; }
-    function szT(n){ return n < 1 ? 'S' : n <= 1 ? 'M' : 'L'; }
-    var MX = { S: 1, M: 2, L: 4 }, MB = { S: 1, M: 2, L: 3 }, MT = { S: 1, M: 1, L: 2 }, MH = { S: 1, M: 1, L: 3 }, MF = { S: 1, M: 2, L: 3 };
-
-    /* 1. keuangan */
-    var TX = hasMg && Array.isArray(mg.tx) ? mg.tx : [], ym = iso(now).slice(0, 7), cats = {};
-    var recent = TX.slice().sort(function(a, b){ return String(b.date).localeCompare(String(a.date)) || (Number(b.id) || 0) - (Number(a.id) || 0); });
-    TX.forEach(function(x){
-      if (x.type === 'out' && String(x.date).slice(0, 7) === ym){ var ck = x.cat || 'Lainnya'; cats[ck] = (cats[ck] || 0) + (Number(x.amt) || 0); }
-    });
-    var topAll = Object.keys(cats).sort(function(a, b){ return cats[b] - cats[a]; }), kz = szB(topAll.length);
-    var top = topAll.slice(0, MB[kz]), cmax = topAll.length ? cats[topAll[0]] : 1;
-    var days = [], mx = 1;
-    for (var i = 6; i >= 0; i--){
-      var dd = new Date(now); dd.setDate(dd.getDate() - i);
-      var dk = iso(dd), ai = 0, ao = 0;
-      TX.forEach(function(x){ if (x.date === dk){ if (x.type === 'in') ai += Number(x.amt) || 0; else ao += Number(x.amt) || 0; } });
-      days.push({ a: ai, b: ao, l: HARI[(dd.getDay() + 6) % 7].charAt(0) }); mx = Math.max(mx, ai, ao);
+  /* ---------- panggil AI ---------- */
+  function cget(){ try{ var c = JSON.parse(localStorage.getItem(CK + uid)); return c && c.r ? c : null; }catch(e){ return null; } }
+  function cset(o){ try{ localStorage.setItem(CK + uid, JSON.stringify(o)); }catch(e){} }
+  function later(){ clearTimeout(gtm); gtm = setTimeout(summ, 1200); }
+  async function summ(force){
+    var O = window.OFC; if (!uid || !loaded) return;
+    if (!O || !O.ai || !O.ai.has()){ ai.st = 'nokey'; draw(); return; }
+    var p = payload(), h = hash(JSON.stringify(p)), c = cget();
+    if (c && !ai.res){ ai.res = c.r; ai.t = c.t; }
+    if (force !== true && c && c.h === h && Date.now() - c.t < 108e5){ ai.res = c.r; ai.t = c.t; ai.st = 'ok'; draw(); return; }
+    if (ai.st === 'load' && force !== true) return;
+    var tok = ++gtok; ai.st = 'load'; draw();
+    try{
+      var d = await O.ai.call({ systemInstruction: { parts: [{ text: SYS }] }, contents: [{ role: 'user', parts: [{ text: 'DATA: ' + JSON.stringify(p) }] }], generationConfig: { responseMimeType: 'application/json', temperature: .4, maxOutputTokens: 1500 } });
+      if (tok !== gtok) return;
+      var ps = (d.candidates && d.candidates[0] && d.candidates[0].content && d.candidates[0].content.parts) || [];
+      var tx = ps.filter(function(x){ return x.text && !x.thought; }).map(function(x){ return x.text; }).join('').replace(/```json|```/g, '').trim();
+      ai.res = clean(JSON.parse(tx)); ai.t = Date.now(); ai.st = 'ok'; cset({ h: h, t: ai.t, r: ai.res });
+    }catch(e){
+      if (tok !== gtok) return;
+      var m = String(e && (e.m || e.message) || '');
+      ai.st = 'err'; ai.err = /API key/i.test(m) || (e && (e.s === 401 || e.s === 403)) ? 'Key tidak valid' : e && e.s === 429 ? 'Terlalu sering, tunggu sebentar' : e && e.s === 408 ? 'Server terlalu lama' : e instanceof SyntaxError ? 'Balasan AI tidak terbaca' : m.slice(0, 90) || 'Error';
     }
-    function hh(v){ return v ? 'height:' + Math.max(8, Math.round(v / mx * 100)) + '%' : 'height:0'; }
-    var spark = '<div class="sp">' + days.map(function(d, j){
-      return '<div class="sd"><div class="sb"><i class="bi' + (d.a ? '' : ' z') + '" style="' + hh(d.a) + ';--d:' + j * 50 + 'ms"></i><i class="bo' + (d.b ? '' : ' z') + '" style="' + hh(d.b) + ';--d:' + j * 50 + 'ms"></i></div><u>' + d.l + '</u></div>';
-    }).join('') + '</div>';
-    var tot = f.inc + f.out, share = tot ? Math.round(f.inc / tot * 100) : 0;
-    var s0 = !hasMg || TX.length < 3 ? 'M' : 'X', nR = s0 === 'X' ? 2 : Math.min(1, TX.length);
-    var cSaldo = card('wd s-receipt s' + s0, URL_MG, 'Saldo', '', num(hasMg ? rp(f.bal) : '—') +
-      (s0 === 'X' ? '<div class="sub">7 hari · <span class="g">▮ masuk</span> <span class="r">▮ keluar</span></div>' + spark : '') +
-      (nR ? '<div class="perf"></div>' + list(recent.slice(0, nR).map(function(x){ return li((x.type === 'in' ? '+' : '-') + short(x.amt), x.cat || x.note || '—'); }), nR, emp, !!errMg) : ''));
-    var cKat = card('tl s-tab s' + kz, URL_MG, 'Kategori', 'bln ini', top.length ? '<div class="hbs">' + top.map(function(k, j){
-      return '<div class="hb"><div class="hl"><span>' + esc(k) + '</span><b>' + short(cats[k]) + '</b></div><s><i style="width:' + Math.max(6, Math.round(cats[k] / cmax * 100)) + '%;--d:' + j * 70 + 'ms"></i></s></div>';
-    }).join('') + '</div>' : list([], 1, hasMg ? 'Belum ada' : emp, !!errMg));
-    var cIn = card('s-coin sS', URL_MG, 'Masuk', '', num(hasMg ? 'Rp' + short(f.inc) : '—', 'g') + (hasMg && tot ? bar(share, 300, '#2fbf5b') : ''));
-    var cOut = card('s-price sS', URL_MG, 'Keluar', '', num(hasMg ? 'Rp' + short(f.out) : '—', 'o') + (hasMg && tot ? bar(100 - share, 380, 'var(--red)') : ''));
-    var p0 = page(0, cSaldo, cIn, cOut, cKat);
-
-    /* 2. todo list */
-    var tdEmp = uid && errTd ? errMsg(errTd) : wait, tdOk = !!(uid && loaded && !errTd), cnt = {};
-    todos.forEach(function(t){ cnt[t.fid] = (cnt[t.fid] || 0) + 1; });
-    var fl = folders.map(function(z){ return { n: cnt[z.id] || 0, name: z.name }; }).sort(function(a, b){ return b.n - a.n; });
-    var all = todos.length + doneN, pct = all ? Math.round(doneN / all * 100) : 0;
-    var tz = sz(todos.length), fz = sz(fl.length), tdErr = !!(uid && errTd);
-    var p1 = page(1,
-      card('wd s-nb s' + tz, URL_SEC, 'To do', '', list(todos.map(function(t){ return '<li class="ck"><i></i><span>' + esc(t.text) + '</span></li>'; }), MX[tz], tdEmp, tdErr)),
-      card('s-arch sM', URL_SEC, 'Progres', '', tdOk ? '<div class="row"><div class="ring" style="--v:' + pct + '"><b>' + pct + '%</b></div><div class="sub">' + doneN + ' dari ' + all + '<br>selesai</div></div>' : num('—')),
-      card('tl s-note s' + fz, URL_SEC, 'Folder', '', list(fl.map(function(z){ return '<li class="fd"><span>' + esc(z.name) + '</span><b>' + z.n + '</b></li>'; }), MF[fz], tdEmp, tdErr)),
-      card('s-stamp sS', URL_SEC, 'Aktif', '', num(tdOk ? todos.length : '—'))
-    );
-
-    /* 3. jadwal */
-    var a0 = hasMg ? agenda(0) : [], a1 = hasMg ? agenda(1) : [];
-    var hz = sz(a0.length), bz = sz(a1.length);
-    var hm = pad(now.getHours()) + ':' + pad(now.getMinutes()), placed = false, tlh = '';
-    var nowLi = '<li class="now"><b>' + hhmm(hm) + '</b><span>sekarang</span></li>';
-    a0.slice(0, MH[hz]).forEach(function(it){
-      if (!placed && it.time && it.time > hm){ tlh += nowLi; placed = true; }
-      tlh += '<li class="ti' + (it.time && it.time < hm ? ' past' : '') + '">' + (it.time ? '<b>' + hhmm(it.time) + '</b>' : '') + '<span>' + esc(it.text) + '</span></li>';
-    });
-    if (!placed && a0.length) tlh += nowLi;
-    var c1 = a0.filter(function(it){ return it.time && it.time >= hm; })[0], nx = null, nxw = '', cd = '';
-    if (c1){
-      nx = c1; nxw = 'Hari ini';
-      var mins = (+c1.time.slice(0, 2)) * 60 + (+c1.time.slice(3, 5)) - (now.getHours() * 60 + now.getMinutes());
-      cd = mins >= 60 ? 'dalam ' + Math.floor(mins / 60) + ' j ' + (mins % 60) + ' m' : 'dalam ' + mins + ' m';
-    } else if (a1[0]){ nx = a1[0]; nxw = 'Besok'; }
-    var p2 = page(2,
-      card('s-bub sM', URL_MG, 'Berikutnya', '', nx ? num(nx.text, 't') + '<div class="sub">' + nxw + (nx.time ? ' · ' + hhmm(nx.time) : '') + (cd ? '<br>' + cd : '') + '</div>' : num('—')),
-      card('wd s-clip s' + hz, URL_MG, 'Hari ini', '', a0.length ? '<ul class="tlx">' + tlh + '</ul>' : list([], 1, emp, !!errMg)),
-      card('s-cal sS', URL_MG, '', '', '<div class="cal-h">' + BULAN[now.getMonth()] + '</div>' + num(now.getDate()) + '<div class="sub">' + d0 + '</div>'),
-      card('tl s-tag s' + bz, URL_MG, 'Besok', '', list(a1.map(function(i){ return li(i.time ? hhmm(i.time) : '', i.text); }), MX[bz], emp, !!errMg))
-    );
-
-    /* 4. tugas */
-    var act = hasMg ? tasks() : [];
-    var hi = act.filter(function(t){ return t.prio === 2; });
-    var late = act.filter(function(t){ return t.deadline && dayDiff(t.deadline) < 0; }).length;
-    var az = szT(act.length), pz = szT(hi.length);
-    var p3 = page(3,
-      card('s-hex sS', URL_MG, 'Aktif', '', hasMg ? '<div class="badge">' + act.length + '</div>' : num('—')),
-      card('wd s-stack s' + az, URL_MG, 'Tugas', '', list(act.map(trow), MT[az], emp, !!errMg)),
-      card('s-stop sS' + (late ? ' bad' : ''), URL_MG, 'Telat', '', num(hasMg ? late : '—') + '<div class="sub">' + (late ? 'segera' : hasMg ? 'aman' : '') + '</div>'),
-      card('tl s-haz s' + pz, URL_MG, 'Prioritas', '', list(hi.map(trow), MT[pz], hasMg ? 'Tidak ada' : emp, !!errMg))
-    );
-
-    pgs.innerHTML = [p0, p1, p2, p3].map(function(h, n){ return '<div class="pg' + (seen[n] ? ' in still' : '') + '">' + h + '</div>'; }).join('');
-    mark();
-    if (!seen[idx]) play(idx);
+    draw();
   }
-
-  /* ---------- geser halaman ---------- */
-  function fit(){ var p = pgs.children[idx]; if (p) vp.style.height = p.offsetHeight + 'px'; }
-  window.addEventListener('resize', fit); window.addEventListener('load', fit);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
-  function mark(){
-    fit();
-    tabs.forEach(function(t, i){ t.classList.toggle('on', i === idx); t.setAttribute('aria-selected', i === idx ? 'true' : 'false'); });
-    dots.forEach(function(d, i){ d.classList.toggle('on', i === idx); });
-    for (var i = 0; i < pgs.children.length; i++){
-      if (i === idx) pgs.children[i].removeAttribute('inert'); else pgs.children[i].setAttribute('inert', '');
-    }
-  }
-  var last = Date.now(), hold = false;
-  var calm = window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches;
-  function countUp(p){
-    if (calm) return;
-    [].forEach.call(p.querySelectorAll('.c:not(.s-cal) .n:not(.t), .badge'), function(el){
-      var m = /^(-?)(Rp)?([\d.]+)$/.exec(el.textContent.trim()); if (!m) return;
-      var to = +m[3].replace(/\./g, ''), pre = m[1] + (m[2] || ''), t0 = 0; if (to < 2) return;
-      requestAnimationFrame(function st(ts){
-        if (!t0) t0 = ts;
-        var k = Math.min(1, Math.max(0, (ts - t0 - 350) / 1000)), e = 1 - Math.pow(1 - k, 3);
-        el.textContent = pre + Math.round(to * e).toLocaleString('id-ID');
-        if (k < 1) requestAnimationFrame(st);
-      });
-    });
-  }
-  function play(i){
-    var p = pgs.children[i]; if (!p) return;
-    p.classList.remove('in', 'still'); void p.offsetWidth; p.classList.add('in'); seen[i] = true;
-    countUp(p);
-  }
-  function go(i){
-    var ch = i !== idx; last = Date.now();
-    idx = Math.max(0, Math.min(tabs.length - 1, i));
-    pgs.style.transition = '';
-    pgs.style.transform = 'translate3d(' + (-idx * 100) + '%,0,0)';
-    mark();
-    if (ch) play(idx);
-  }
-  tabs.concat(dots).forEach(function(b){ b.addEventListener('click', function(){ go(+b.getAttribute('data-i')); }); });
-
-  var sx = 0, dx = 0, drag = false, moved = false, w = 1;
-  vp.addEventListener('pointerdown', function(e){
-    if (e.pointerType === 'mouse' && e.button !== 0) return;
-    drag = true; moved = false; sx = e.clientX; dx = 0; w = vp.offsetWidth || 1;
-  });
-  window.addEventListener('pointermove', function(e){
-    if (!drag) return;
-    dx = e.clientX - sx;
-    if (!moved){ if (Math.abs(dx) < 8) return; moved = true; pgs.style.transition = 'none'; }
-    var d = dx; if ((idx === 0 && d > 0) || (idx === tabs.length - 1 && d < 0)) d /= 3;
-    pgs.style.transform = 'translate3d(calc(' + (-idx * 100) + '% + ' + d + 'px),0,0)';
-  });
-  function endDrag(){
-    if (!drag) return; drag = false;
-    if (moved){ if (dx < -w * .15) go(idx + 1); else if (dx > w * .15) go(idx - 1); else go(idx); }
-  }
-  window.addEventListener('pointerup', endDrag);
-  window.addEventListener('pointercancel', endDrag);
-  vp.addEventListener('click', function(e){ if (moved){ e.preventDefault(); e.stopPropagation(); } }, true);
-  vp.addEventListener('dragstart', function(e){ e.preventDefault(); });
-
-  /* kartu miring mengikuti kursor (mouse saja) */
-  pgs.addEventListener('pointermove', function(e){
-    if (e.pointerType !== 'mouse' || drag) return;
-    var c = e.target.closest && e.target.closest('a.c'); if (!c) return;
-    var r = c.getBoundingClientRect();
-    c.style.setProperty('--tx', (((e.clientY - r.top) / r.height - .5) * -8).toFixed(2) + 'deg');
-    c.style.setProperty('--ty', (((e.clientX - r.left) / r.width - .5) * 8).toFixed(2) + 'deg');
-  });
-  pgs.addEventListener('pointerout', function(e){
-    var c = e.target.closest && e.target.closest('a.c'); if (!c) return;
-    c.style.removeProperty('--tx'); c.style.removeProperty('--ty');
-  });
-
-  /* auto-scroll tiap 3 detik, berhenti saat disentuh / di-hover */
-  var dash = document.getElementById('dash');
-  function setHold(v){
-    hold = v; dash.classList.toggle('hold', v);
-    if (!v){ last = Date.now(); var t = tabs[idx]; t.classList.remove('on'); void t.offsetWidth; t.classList.add('on'); }
-  }
-  dash.addEventListener('pointerenter', function(e){ if (e.pointerType === 'mouse') setHold(true); });
-  dash.addEventListener('pointerleave', function(e){ if (e.pointerType === 'mouse') setHold(false); });
-  dash.addEventListener('pointerdown', function(e){ if (e.pointerType !== 'mouse') setHold(true); });
-  window.addEventListener('pointerup', function(e){ if (e.pointerType !== 'mouse' && hold) setHold(false); });
-  window.addEventListener('pointercancel', function(e){ if (e.pointerType !== 'mouse' && hold) setHold(false); });
-  window.addEventListener('resize', fit);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
-  setInterval(function(){
-    if (calm || hold || drag || document.hidden) return;
-    if (Date.now() - last >= 6000) go((idx + 1) % tabs.length);
-  }, 300);
 
   /* ---------- masuk / keluar ---------- */
   function setAuth(){ authBtn.textContent = uid ? 'Keluar' : 'Masuk'; document.querySelector('.wrap').style.display = uid ? '' : 'none'; }
@@ -1073,7 +1011,7 @@ main:hover .col,main .col:hover{flex-grow:0}
         folders = r[2].error ? [] : (r[2].data || []);
         if (!loaded) seen = [];
         loaded = true;
-        draw();
+        draw(); later();
       } while (again);
     }catch(e){ loaded = true; draw(); }
     busy = false;
@@ -1088,7 +1026,7 @@ main:hover .col,main .col:hover{flex-grow:0}
         .subscribe();
     }catch(e){}
   }
-  function reset(){ seen = []; mg = null; todos = []; doneN = 0; folders = []; loaded = false; errMg = ''; errTd = ''; }
+  function reset(){ ai.res = null; ai.st = 'idle'; ai.t = 0; last = ''; seen = []; mg = null; todos = []; doneN = 0; folders = []; loaded = false; errMg = ''; errTd = ''; }
   function start(session){
     var id = session.user.id;
     if (uid === id) return;
@@ -1100,10 +1038,10 @@ main:hover .col,main .col:hover{flex-grow:0}
     setAuth(); draw();
   }
 
-  setAuth(); draw(); go(0);
+  setAuth(); draw();
   if (!sb) return;
 
-  window.OFC = { sb: sb, uid: function(){ return uid; }, reload: load };
+  window.OFC = { sb: sb, uid: function(){ return uid; }, reload: load, summ: summ };
   sb.auth.onAuthStateChange(function(ev, session){
     if (ev === 'SIGNED_OUT') stop();
     else if (session && (ev === 'SIGNED_IN' || ev === 'INITIAL_SESSION')) setTimeout(function(){ start(session); }, 0);
@@ -1605,6 +1543,7 @@ function call(obj,tb){
     next();
   });
 }
+window.OFC = window.OFC || {}; window.OFC.ai = { call: call, has: function(){ return !!key(); } };
 async function run(name, a){
     try{
       if (name === 'ubah_data') return await mutate(a);
@@ -1650,7 +1589,7 @@ async function run(name, a){
 
   /* ---------- event ---------- */
   function go(){ var i = $('#aiI'), v = i.value; i.value = ''; send(v); }
-  function saveKey(){ var v = $('#aiKi').value.trim(); if (!v) return; mem = v; try{ localStorage.setItem(KEY, v); }catch(x){} $('#aiKi').value = ''; $('#aiKey').hidden = true; view(); suggest(); $('#aiI').focus(); }
+  function saveKey(){ var v = $('#aiKi').value.trim(); if (!v) return; mem = v; try{ localStorage.setItem(KEY, v); }catch(x){} $('#aiKi').value = ''; $('#aiKey').hidden = true; view(); suggest(); $('#aiI').focus(); if (window.OFC && window.OFC.summ) window.OFC.summ(true); }
   $('#aiFab').addEventListener('click', open);
   $('#aiX').addEventListener('click', close);
   $('#aiPx').addEventListener('click', closePop);
