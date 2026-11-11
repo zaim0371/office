@@ -632,6 +632,77 @@ main:hover .col,main .col:hover{flex-grow:0}
 @keyframes xg{from{transform:scaleY(0)}}
 @keyframes xw{50%{opacity:.4}}
 @media (prefers-reduced-motion:no-preference){.xcc i{animation:xg .6s var(--d,0ms) both}.xsk i{animation:xw 1s infinite}}
+
+/* ===== LAUNCHER KOMPAK: 6 tombol ikon dalam satu layar ===== */
+main{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;max-width:560px;width:100%;margin:0 auto;padding:18px 16px 10px;flex:none;min-height:0}
+.tile{
+  --c:var(--yellow);position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  padding:14px 4px 12px;min-width:0;background:var(--c);color:var(--ink);text-decoration:none;
+  border:4px solid var(--ink);box-shadow:5px 5px 0 var(--ink);contain:layout paint;
+  transition:transform .15s cubic-bezier(.2,1.5,.4,1),box-shadow .15s;
+  animation:rise .7s cubic-bezier(.2,1.3,.4,1) both;animation-delay:calc(var(--i)*90ms + 150ms);
+  -webkit-tap-highlight-color:transparent;
+}
+.tile:nth-child(1){--c:var(--pink)}.tile:nth-child(2){--c:var(--blue)}.tile:nth-child(3){--c:var(--green)}
+.tile:nth-child(4){--c:var(--yellow)}.tile:nth-child(5){--c:#c4b0ff}.tile:nth-child(6){--c:#ff9a6c}
+.tile:hover{transform:translate(-3px,-3px);box-shadow:8px 8px 0 var(--ink)}
+.tile:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink);transition-duration:.06s}
+.tile:focus-visible{outline:5px solid var(--red);outline-offset:3px}
+.tile .ico{
+  width:clamp(58px,17vw,76px);aspect-ratio:1;display:grid;place-items:center;background:#fff;
+  border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);transition:transform .25s cubic-bezier(.2,1.6,.4,1);
+}
+.tile:hover .ico{transform:rotate(-7deg) scale(1.08)}
+.tile .ico svg{width:74%;height:74%;display:block;animation:ifloat 4s ease-in-out infinite;animation-delay:calc(var(--i)*-.7s);will-change:transform}
+.tile .nm{font-family:'Archivo Black',Impact,sans-serif;font-size:clamp(10px,2.9vw,14px);letter-spacing:-.2px;text-transform:uppercase;line-height:1}
+.tile svg *{transform-box:fill-box}
+body::after{content:"";display:block;height:84px;flex:none}
+
+@keyframes ifloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-3px) rotate(-2deg)}}
+@keyframes iwrite{0%,100%{transform:translate(-3px,0) rotate(-3deg)}50%{transform:translate(4px,2px) rotate(3deg)}}
+@keyframes iline{0%{transform:scaleX(0)}35%,85%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+@keyframes ibar{0%,100%{transform:scaleY(.55)}50%{transform:scaleY(1)}}
+@keyframes iring{0%,55%,100%{transform:rotate(0)}6%{transform:rotate(14deg)}14%{transform:rotate(-12deg)}22%{transform:rotate(9deg)}30%{transform:rotate(-6deg)}38%{transform:rotate(3deg)}}
+@keyframes iclap{0%,55%,100%{transform:translateX(0)}10%{transform:translateX(-4px)}20%{transform:translateX(4px)}30%{transform:translateX(-2px)}}
+@keyframes idot{0%,100%{transform:scale(1)}50%{transform:scale(1.35)}}
+@keyframes icap{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-3px) rotate(-3deg)}}
+@keyframes itas{0%,100%{transform:rotate(7deg)}50%{transform:rotate(-9deg)}}
+@keyframes ibeat{0%,40%,100%{transform:scale(1)}12%{transform:scale(1.22)}24%{transform:scale(.96)}30%{transform:scale(1.14)}}
+@keyframes ilock{0%,55%,100%{transform:translateY(0)}68%,80%{transform:translateY(-5px)}90%{transform:translateY(0)}}
+@keyframes ikey{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+
+.k-workspace .pen{animation:iwrite 2.6s ease-in-out infinite;transform-origin:50% 100%}
+.k-workspace .ln{transform-origin:0 50%;animation:iline 3.6s ease-in-out infinite}
+.k-workspace .l2{animation-delay:.3s}.k-workspace .l3{animation-delay:.6s}
+.k-manager .bar{transform-origin:50% 100%;animation:ibar 2.4s ease-in-out infinite}
+.k-manager .b2{animation-delay:-.8s}.k-manager .b3{animation-delay:-1.6s}
+.k-secretary .bell{transform-origin:50% 0;animation:iring 3.4s ease-in-out infinite}
+.k-secretary .clap{animation:iclap 3.4s ease-in-out infinite}
+.k-secretary .dot{transform-origin:50% 50%;animation:idot 1.6s ease-in-out infinite}
+.k-classroom .cap{transform-origin:50% 60%;animation:icap 3.2s ease-in-out infinite}
+.k-classroom .tas{transform-origin:50% 0;animation:itas 2.2s ease-in-out infinite}
+.k-confidant .heart{transform-origin:50% 55%;animation:ibeat 2.2s ease-in-out infinite}
+.k-unsent .shk{animation:ilock 4s ease-in-out infinite}
+.k-unsent .key{transform-origin:50% 50%;animation:ikey 2s ease-in-out infinite}
+
+.tile.off .ico svg,.tile.off .ico svg *{animation-play-state:paused}
+.hid .ico svg,.hid .ico svg *,.hid .track{animation-play-state:paused!important}
+.track{will-change:transform}
+
+/* ===== RANGKUMAN AI: lipat ===== */
+.wrap{max-width:560px;padding:10px 16px 6px}
+.panel{max-width:none;animation-delay:.5s}
+.xh{cursor:pointer;padding-bottom:10px}
+.xtease{flex:1;min-width:0;font-weight:700;font-size:12px;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.xtg svg{display:block;margin:auto;transition:transform .2s}
+#dash:not(.shut) .xtg svg{transform:rotate(180deg)}
+#dash:not(.shut) .xtease{display:none}
+#dash.shut .xb,#dash.shut #xStamp{display:none}
+#dash.shut .xh{padding-bottom:0}
+.panel{padding:12px 0 12px}
+
+@media (max-width:760px){main{gap:14px;padding:16px 16px 8px}.wrap{padding:8px 16px 4px}}
+@media (prefers-reduced-motion:reduce){.tile .ico svg,.tile .ico svg *{animation:none!important}}
 </style>
 </head>
 <body>
@@ -641,57 +712,22 @@ main:hover .col,main .col:hover{flex-grow:0}
   <button class="hbtn" id="authBtn" type="button">Masuk</button>
 </header>
 
-<div class="wrap">
-  <section class="panel" id="dash" aria-label="Rangkuman AI">
-    <div class="xh"><span>RANGKUMAN AI</span><small id="xStamp"></small><button class="xref" id="xRef" type="button" aria-label="Segarkan">&#8635;</button></div>
-    <div class="xb" id="xb"></div>
-  </section>
-</div>
+
 
 <main>
-    <a class="col" href="https://zaim0371.github.io/note/">
-    <span class="tag">Workspace</span>
-    <span class="sticker">+</span>
-    <div>
-      <div class="big">Work&shy;space</div>
-      <p class="desc">Ruang kerja pribadi canggih.</p>
-    </div>
-    <span class="go">Buka <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"><path d="M4 12h16M13 5l7 7-7 7"/></svg></span>
-  </a>
-
-  <a class="col" href="https://zaim0371.github.io/manager/">
-    <span class="tag">Manager</span>
-    <span class="sticker">#</span>
-    <div>
-      <div class="big">Man&shy;ager</div>
-      <p class="desc">Manager pribadi for the best version of yourself.</p>
-    </div>
-    <span class="go">Buka <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"><path d="M4 12h16M13 5l7 7-7 7"/></svg></span>
-  </a>
-
-  <a class="col" href="https://zaim0371.github.io/secretary/">
-    <span class="tag">Secretary</span>
-    <span class="sticker">?</span>
-    <div>
-      <div class="big">Secre&shy;tary</div>
-      <p class="desc">Catatan pribadi dengan pengingat yang siap membantu.</p>
-    </div>
-    <span class="go">Buka <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"><path d="M4 12h16M13 5l7 7-7 7"/></svg></span>
-  </a>
-
-  <a class="col" href="https://zaim0371.github.io/classroom/">
-    <span class="tag">Classroom</span>
-    <span class="sticker">!</span>
-    <div>
-      <div class="big">Class&shy;room</div>
-      <p class="desc">Ruang belajar pribadi.</p>
-    </div>
-    <span class="go">Buka <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"><path d="M4 12h16M13 5l7 7-7 7"/></svg></span>
-  </a>
+  <a class="tile k-workspace" style="--i:0" href="https://zaim0371.github.io/note/"><span class="ico"><svg viewBox="0 0 64 64" fill="none" stroke="#111" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><rect x="9" y="8" width="36" height="48" fill="#fff"/><path d="M18 8v48"/><path class="ln l1" d="M25 21h13"/><path class="ln l2" d="M25 30h13"/><path class="ln l3" d="M25 39h8"/><g transform="translate(47 38) rotate(38)"><g class="pen"><rect x="-5" y="-22" width="10" height="30" fill="#ffe14d"/><path d="M-5 8h10l-5 11z" fill="#fff"/><path d="M-5 -14h10"/></g></g></svg></span><span class="nm">Workspace</span></a>
+  <a class="tile k-manager" style="--i:1" href="https://zaim0371.github.io/manager/"><span class="ico"><svg viewBox="0 0 64 64" fill="none" stroke="#111" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><rect x="7" y="7" width="50" height="50" fill="#fff"/><path d="M13 51h38"/><rect class="bar b1" x="14" y="34" width="10" height="17" fill="#ff7ab8"/><rect class="bar b2" x="27" y="25" width="10" height="26" fill="#6ec1ff"/><rect class="bar b3" x="40" y="15" width="10" height="36" fill="#7dff9b"/></svg></span><span class="nm">Manager</span></a>
+  <a class="tile k-secretary" style="--i:2" href="https://zaim0371.github.io/secretary/"><span class="ico"><svg viewBox="0 0 64 64" fill="none" stroke="#111" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><g class="bell"><path d="M32 9c-9 0-15 7-15 16v9l-5 9h40l-5-9v-9c0-9-6-16-15-16z" fill="#ffe14d"/><path d="M32 9V6"/><g class="clap"><path d="M26 51a6 6 0 0 0 12 0z" fill="#111"/></g></g><circle class="dot" cx="48" cy="14" r="6" fill="#ff4d3d"/></svg></span><span class="nm">Secretary</span></a>
+  <a class="tile k-classroom" style="--i:3" href="https://zaim0371.github.io/classroom/"><span class="ico"><svg viewBox="0 0 64 64" fill="none" stroke="#111" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><g class="cap"><path d="M32 12L5 25l27 13 27-13z" fill="#6ec1ff"/><path d="M15 32v12c0 4 8 8 17 8s17-4 17-8V32l-17 8z" fill="#fff"/><g class="tas"><path d="M55 27v15"/><circle cx="55" cy="46" r="4" fill="#ff4d3d"/></g></g></svg></span><span class="nm">Classroom</span></a>
+  <a class="tile k-confidant" style="--i:4" href="https://zaim0371.github.io/confidant-/"><span class="ico"><svg viewBox="0 0 64 64" fill="none" stroke="#111" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M8 10h48v32H31l-13 11V42H8z" fill="#fff"/><path class="heart" d="M32 37c-9-6-12-10-12-14a6 6 0 0 1 12-2 6 6 0 0 1 12 2c0 4-3 8-12 14z" fill="#ff4d3d"/></svg></span><span class="nm">Confidant</span></a>
+  <a class="tile k-unsent" style="--i:5" href="#unsent" id="unsentCard" role="button" aria-haspopup="dialog"><span class="ico"><svg viewBox="0 0 64 64" fill="none" stroke="#111" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path class="shk" d="M22 28v-9a10 10 0 0 1 20 0v9"/><rect x="13" y="28" width="38" height="27" fill="#ffe14d"/><circle class="key" cx="32" cy="40" r="4" fill="#111"/><path d="M32 42v6"/></svg></span><span class="nm">Unsent</span></a>
 </main>
 
-<div class="ubar">
-  <a class="ulock" href="#unsent" id="unsentCard" role="button" aria-haspopup="dialog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"><rect x="4" y="10.5" width="16" height="10.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/><path d="M12 14.5v3"/></svg>Unsent</a>
+<div class="wrap">
+  <section class="panel shut" id="dash" aria-label="Rangkuman AI">
+    <div class="xh" id="xHead"><span>RANGKUMAN AI</span><small class="xtease" id="xTease"></small><small id="xStamp"></small><button class="xref" id="xRef" type="button" aria-label="Segarkan">&#8635;</button><button class="xref xtg" id="xTg" type="button" aria-expanded="false" aria-controls="xb" aria-label="Buka rangkuman"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="square"><path d="M5 9l7 7 7-7"/></svg></button></div>
+    <div class="xb" id="xb"></div>
+  </section>
 </div>
 
 <div class="pin-overlay" id="loginOv" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
@@ -733,10 +769,27 @@ main:hover .col,main .col:hover{flex-grow:0}
   <div class="track" id="track"></div>
 </footer>
 
+<script>
+(function(){
+  var t=document.querySelectorAll('.tile');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){e.target.classList.toggle('off',!e.isIntersecting)})},{rootMargin:'80px'});
+    t.forEach(function(c){io.observe(c)});
+  }
+  document.addEventListener('visibilitychange',function(){document.documentElement.classList.toggle('hid',document.hidden)});
+  var d=document.getElementById('dash'),tg=document.getElementById('xTg'),K='zn_xopen';
+  function set(o){d.classList.toggle('shut',!o);tg.setAttribute('aria-expanded',o);tg.setAttribute('aria-label',o?'Tutup rangkuman':'Buka rangkuman');try{localStorage.setItem(K,o?'1':'0')}catch(e){}}
+  try{if(localStorage.getItem(K)==='1'){d.classList.remove('shut');tg.setAttribute('aria-expanded','true')}}catch(e){}
+  document.getElementById('xHead').addEventListener('click',function(e){
+    if(e.target.closest('#xRef'))return;
+    set(d.classList.contains('shut'));
+  });
+})();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
 <script>
   var t = document.getElementById('track');
-  var s = "UNSENT ✱ WORKSPACE ✱ MANAGER ✱ SECRETARY ✱ CLASSROOM ✱ ZAIM'S OFFICE ✱ ";
+  var s = "UNSENT ✱ WORKSPACE ✱ MANAGER ✱ SECRETARY ✱ CLASSROOM ✱ CONFIDANT ✱ ZAIM'S OFFICE ✱ ";
   var html = '';
   for (var i = 0; i < 12; i++) html += '<span>' + s + '</span>';
   t.innerHTML = html;
@@ -931,6 +984,7 @@ main:hover .col,main .col:hover{flex-grow:0}
     else if (ai.st === 'err') h = '<div class="xm"><b>Gagal merangkum</b><span>' + esc(ai.err) + '</span><button class="xbtn" type="button" id="xRetry">Coba lagi</button></div>';
     else h = '<div class="xm"><b>AI lagi merangkum…</b><div class="xsk"><i></i><i></i><i></i></div></div>';
     if (h !== last){ body.innerHTML = h; last = h; }
+    var te = document.getElementById('xTease'); if (te) te.textContent = r ? r.judul : ai.st === 'nokey' ? 'Belum ada API key' : ai.st === 'err' ? 'Gagal merangkum' : 'AI lagi merangkum…';
     stamp.textContent = ai.st === 'load' ? 'memperbarui…' : ai.st === 'err' && r ? 'gagal memperbarui' : ai.t ? 'diperbarui ' + pad(new Date(ai.t).getHours()) + '.' + pad(new Date(ai.t).getMinutes()) : '';
   }
   body.addEventListener('click', function(e){
@@ -1069,7 +1123,7 @@ main:hover .col,main .col:hover{flex-grow:0}
 /* Asisten Office: baca & ubah data Manager (manager_state) dan Secretary (secretary_*) lewat Gemini. */
 (function(){
   var KEY = 'zn_gkey', MODELS = ['gemini-flash-lite-latest','gemini-2.5-flash','gemini-flash-latest'], MODELS_IMG = ['gemini-2.5-flash','gemini-flash-lite-latest','gemini-flash-latest'];
-  var SITES = { manager:'https://zaim0371.github.io/manager/', secretary:'https://zaim0371.github.io/secretary/', workspace:'https://zaim0371.github.io/note/' };
+  var SITES = { manager:'https://zaim0371.github.io/manager/', secretary:'https://zaim0371.github.io/secretary/', workspace:'https://zaim0371.github.io/note/', confidant:'https://zaim0371.github.io/confidant-/' };
   var DAYS = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'], PRIO = ['rendah','sedang','tinggi'];
   var COLN = ['lime','ungu','kuning','pink','tosca'], COL = ['#DFF65A','#D9D0FF','#FFE8A3','#FFC9DD','#BFF0E8'];
   var TBL = { notes:'secretary_notes', folders:'secretary_folders', todos:'secretary_todos', wish:'secretary_wishes' };
@@ -1467,8 +1521,8 @@ main:hover .col,main .col:hover{flex-grow:0}
         tanggal:S('YYYY-MM-DD. Keuangan: tanggal transaksi. Jadwal: tanggal kegiatan sekali'), deadline:S('YYYY-MM-DD'), jam:S('HH:MM'), kerjakan_pada:S('YYYY-MM-DD'), jam_kerjakan:S('HH:MM'), prioritas:S(),
         hari:{ type:'ARRAY', items:S('Senin..Minggu atau semua') }, sampai:S('YYYY-MM-DD, kosong/permanen = tanpa batas'), folder_id:S(), folder_nama:S(), selesai:{ type:'BOOLEAN' }
       }, required:['area','aksi'] } },
-    { name:'buka_web', description:'Pindah ke halaman web. tujuan: manager, secretary, workspace, unsent (minta PIN), atau isi url untuk situs lain',
-      parameters:{ type:'OBJECT', properties:{ tujuan:S('', ['manager','secretary','workspace','unsent','lainnya']), url:S('hanya untuk tujuan lainnya') }, required:['tujuan'] } },
+    { name:'buka_web', description:'Pindah ke halaman web. tujuan: manager, secretary, workspace, confidant, unsent (minta PIN), atau isi url untuk situs lain',
+      parameters:{ type:'OBJECT', properties:{ tujuan:S('', ['manager','secretary','workspace','confidant','unsent','lainnya']), url:S('hanya untuk tujuan lainnya') }, required:['tujuan'] } },
     { name:'popup', description:'Tampilkan data dalam popup. Pakai sumber agar data diambil langsung dari database (akurat), dengan filter opsional. Untuk hasil olahan sendiri pakai kolom dan baris (tiap baris string, sel dipisah |), atau teks saja.',
       parameters:{ type:'OBJECT', properties:{ judul:S(), sumber:S('', ['transaksi','jadwal','tugas','note','todo','wish','folder']), kata:S('filter teks'), status:S('', ['aktif','selesai','semua']),
         jenis:S('khusus transaksi', ['masuk','keluar']), dari:S('YYYY-MM-DD'), sampai:S('YYYY-MM-DD'), kolom:{ type:'ARRAY', items:S() }, baris:{ type:'ARRAY', items:S() }, teks:S('catatan di bawah tabel') } } }
