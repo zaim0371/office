@@ -645,6 +645,7 @@ main{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;max-wid
 }
 .tile:nth-child(1){--c:var(--pink)}.tile:nth-child(2){--c:var(--blue)}.tile:nth-child(3){--c:var(--green)}
 .tile:nth-child(4){--c:var(--yellow)}.tile:nth-child(5){--c:#c4b0ff}.tile:nth-child(6){--c:#ff9a6c}
+.tile:nth-child(7){--c:#ff6b6b;grid-column:2}
 .tile:hover{transform:translate(-3px,-3px);box-shadow:8px 8px 0 var(--ink)}
 .tile:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink);transition-duration:.06s}
 .tile:focus-visible{outline:5px solid var(--red);outline-offset:3px}
@@ -682,6 +683,7 @@ body::after{content:"";display:block;height:84px;flex:none}
 .k-classroom .cap{transform-origin:50% 60%;animation:icap 3.2s ease-in-out infinite}
 .k-classroom .tas{transform-origin:50% 0;animation:itas 2.2s ease-in-out infinite}
 .k-confidant .heart{transform-origin:50% 55%;animation:ibeat 2.2s ease-in-out infinite}
+.k-brain .bra{transform-origin:50% 55%;animation:ibeat 2.6s ease-in-out infinite}
 .k-unsent .shk{animation:ilock 4s ease-in-out infinite}
 .k-unsent .key{transform-origin:50% 50%;animation:ikey 2s ease-in-out infinite}
 
@@ -721,6 +723,7 @@ body::after{content:"";display:block;height:84px;flex:none}
   <a class="tile k-classroom" style="--i:3" href="https://zaim0371.github.io/classroom/"><span class="ico"><svg viewBox="0 0 64 64" fill="none" stroke="#111" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><g class="cap"><path d="M32 12L5 25l27 13 27-13z" fill="#6ec1ff"/><path d="M15 32v12c0 4 8 8 17 8s17-4 17-8V32l-17 8z" fill="#fff"/><g class="tas"><path d="M55 27v15"/><circle cx="55" cy="46" r="4" fill="#ff4d3d"/></g></g></svg></span><span class="nm">Classroom</span></a>
   <a class="tile k-confidant" style="--i:4" href="https://zaim0371.github.io/confidant-/"><span class="ico"><svg viewBox="0 0 64 64" fill="none" stroke="#111" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M8 10h48v32H31l-13 11V42H8z" fill="#fff"/><path class="heart" d="M32 37c-9-6-12-10-12-14a6 6 0 0 1 12-2 6 6 0 0 1 12 2c0 4-3 8-12 14z" fill="#ff4d3d"/></svg></span><span class="nm">Confidant</span></a>
   <a class="tile k-unsent" style="--i:5" href="#unsent" id="unsentCard" role="button" aria-haspopup="dialog"><span class="ico"><svg viewBox="0 0 64 64" fill="none" stroke="#111" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path class="shk" d="M22 28v-9a10 10 0 0 1 20 0v9"/><rect x="13" y="28" width="38" height="27" fill="#ffe14d"/><circle class="key" cx="32" cy="40" r="4" fill="#111"/><path d="M32 42v6"/></svg></span><span class="nm">Unsent</span></a>
+  <a class="tile k-brain" style="--i:6" href="https://zaim0371.github.io/brain/"><span class="ico"><svg viewBox="0 0 64 64" fill="none" stroke="#111" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><g class="bra"><path d="M32 12c-3-5-12-5-15 1-6 0-10 6-8 12-4 3-4 10 1 13-1 6 4 12 10 10 3 5 10 5 12 0z" fill="#ff9ec9"/><path d="M32 12c3-5 12-5 15 1 6 0 10 6 8 12 4 3 4 10-1 13 1 6-4 12-10 10-3 5-10 5-12 0z" fill="#8fd3ff"/><path d="M32 12v39M20 26h8M36 26h8M22 38h6M36 38h6"/><circle cx="20" cy="26" r="2.2" fill="#ffd93d" stroke="none"/><circle cx="44" cy="26" r="2.2" fill="#ffd93d" stroke="none"/></g></svg></span><span class="nm">Brain</span></a>
 </main>
 
 <div class="wrap">
@@ -789,7 +792,7 @@ body::after{content:"";display:block;height:84px;flex:none}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
 <script>
   var t = document.getElementById('track');
-  var s = "UNSENT ✱ WORKSPACE ✱ MANAGER ✱ SECRETARY ✱ CLASSROOM ✱ CONFIDANT ✱ ZAIM'S OFFICE ✱ ";
+  var s = "UNSENT ✱ WORKSPACE ✱ MANAGER ✱ SECRETARY ✱ CLASSROOM ✱ CONFIDANT ✱ BRAIN ✱ ZAIM'S OFFICE ✱ ";
   var html = '';
   for (var i = 0; i < 12; i++) html += '<span>' + s + '</span>';
   t.innerHTML = html;
@@ -1123,7 +1126,7 @@ body::after{content:"";display:block;height:84px;flex:none}
 /* Asisten Office: baca & ubah data Manager (manager_state) dan Secretary (secretary_*) lewat Gemini. */
 (function(){
   var KEY = 'zn_gkey', MODELS = ['gemini-flash-lite-latest','gemini-2.5-flash','gemini-flash-latest'], MODELS_IMG = ['gemini-2.5-flash','gemini-flash-lite-latest','gemini-flash-latest'];
-  var SITES = { manager:'https://zaim0371.github.io/manager/', secretary:'https://zaim0371.github.io/secretary/', workspace:'https://zaim0371.github.io/note/', confidant:'https://zaim0371.github.io/confidant-/' };
+  var SITES = { manager:'https://zaim0371.github.io/manager/', secretary:'https://zaim0371.github.io/secretary/', workspace:'https://zaim0371.github.io/note/', confidant:'https://zaim0371.github.io/confidant-/', brain:'https://zaim0371.github.io/brain/' };
   var DAYS = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'], PRIO = ['rendah','sedang','tinggi'];
   var COLN = ['lime','ungu','kuning','pink','tosca'], COL = ['#DFF65A','#D9D0FF','#FFE8A3','#FFC9DD','#BFF0E8'];
   var TBL = { notes:'secretary_notes', folders:'secretary_folders', todos:'secretary_todos', wish:'secretary_wishes' };
@@ -1521,8 +1524,8 @@ body::after{content:"";display:block;height:84px;flex:none}
         tanggal:S('YYYY-MM-DD. Keuangan: tanggal transaksi. Jadwal: tanggal kegiatan sekali'), deadline:S('YYYY-MM-DD'), jam:S('HH:MM'), kerjakan_pada:S('YYYY-MM-DD'), jam_kerjakan:S('HH:MM'), prioritas:S(),
         hari:{ type:'ARRAY', items:S('Senin..Minggu atau semua') }, sampai:S('YYYY-MM-DD, kosong/permanen = tanpa batas'), folder_id:S(), folder_nama:S(), selesai:{ type:'BOOLEAN' }
       }, required:['area','aksi'] } },
-    { name:'buka_web', description:'Pindah ke halaman web. tujuan: manager, secretary, workspace, confidant, unsent (minta PIN), atau isi url untuk situs lain',
-      parameters:{ type:'OBJECT', properties:{ tujuan:S('', ['manager','secretary','workspace','confidant','unsent','lainnya']), url:S('hanya untuk tujuan lainnya') }, required:['tujuan'] } },
+    { name:'buka_web', description:'Pindah ke halaman web. tujuan: manager, secretary, workspace, confidant, brain, unsent (minta PIN), atau isi url untuk situs lain',
+      parameters:{ type:'OBJECT', properties:{ tujuan:S('', ['manager','secretary','workspace','confidant','brain','unsent','lainnya']), url:S('hanya untuk tujuan lainnya') }, required:['tujuan'] } },
     { name:'popup', description:'Tampilkan data dalam popup. Pakai sumber agar data diambil langsung dari database (akurat), dengan filter opsional. Untuk hasil olahan sendiri pakai kolom dan baris (tiap baris string, sel dipisah |), atau teks saja.',
       parameters:{ type:'OBJECT', properties:{ judul:S(), sumber:S('', ['transaksi','jadwal','tugas','note','todo','wish','folder']), kata:S('filter teks'), status:S('', ['aktif','selesai','semua']),
         jenis:S('khusus transaksi', ['masuk','keluar']), dari:S('YYYY-MM-DD'), sampai:S('YYYY-MM-DD'), kolom:{ type:'ARRAY', items:S() }, baris:{ type:'ARRAY', items:S() }, teks:S('catatan di bawah tabel') } } }
